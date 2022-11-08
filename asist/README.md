@@ -1,5 +1,6 @@
 # Integrantes
 Jovany Yair Patiño Rayo
+Xiadani Gutierrez Rendon (emoxa)
 
 
 
