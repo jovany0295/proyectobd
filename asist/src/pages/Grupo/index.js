@@ -4,7 +4,6 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Search from '../../components/Search';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import Alumnos from '../Alumnos';
 const url="http://127.0.0.1:8000/drey/v1/Grupo/";
 const urlAlumnos="http://127.0.0.1:8000/drey/v1/Alumno/";
 const urlGrupoAlumnos="http://127.0.0.1:8000/drey/v1/Grupo_has_Alumnos/";

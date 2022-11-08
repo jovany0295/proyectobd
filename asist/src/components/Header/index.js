@@ -16,8 +16,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { useNavigate } from "react-router-dom";
+import ListSubheader from '@mui/material/ListSubheader';
+import Collapse from '@mui/material/Collapse';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import SendIcon from '@mui/icons-material/Send';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import StarBorder from '@mui/icons-material/StarBorder';
 
 const drawerWidth = 240;
 
@@ -98,6 +106,28 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  const navigate = useNavigate();
+  const handleClickAlumnos = () => {
+ navigate('/Alumnos');
+ }
+ const handleClickMaestros = () => {
+   navigate('/Master');
+ }
+ const handleClickGrupos = () => {
+   navigate('/Grupo');
+ }
+ const handleClickMaterias = () => {
+   navigate('/Materias');
+ }
+ const handleClickAsistencia = () => {
+   navigate('/Asistencia');
+ }
+ const handleClickClase = () => {
+   navigate('/Clase');
+ }
+ const handleClickHome = () => {
+   navigate('/');
+ }
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -127,30 +157,48 @@ export default function MiniDrawer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {['Asistencia', 'Maestros', 'Alumnos', 'Grupo'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+        <List
+      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      component="nav"
+      aria-labelledby="nested-list-subheader"
+      
+    >
+      <ListItemButton onClick={ () => handleClickHome()}>
+        <ListItemIcon>
+          <SendIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" />
+      </ListItemButton>
+      <ListItemButton onClick={ () => handleClickAlumnos()}>
+        <ListItemIcon>
+          <SendIcon />
+        </ListItemIcon>
+        <ListItemText primary="Alumnos" />
+      </ListItemButton>
+      <ListItemButton onClick={ () => handleClickMaestros()} >
+        <ListItemIcon>
+          <DraftsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Maestros" />
+      </ListItemButton>
+      <ListItemButton  onClick={ () => handleClickAsistencia()}>
+        <ListItemIcon>
+          <InboxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Asistencia" />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <StarBorder />
+            </ListItemIcon>
+            <ListItemText primary="Starred" />
+          </ListItemButton>
         </List>
+      </Collapse>
+    </List>
         <Divider />
         <List>
           {['Reunion', 'Clase', 'Materias'].map((text, index) => (

@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from "axios";
 import Search from '../../components/Search';
-
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { margin } from '@mui/system';
 
-
-
-const url="http://127.0.0.1:8000/drey/v1/Maestros/";
+const url="http://127.0.0.1:8000/bd/v1/Maestro/";
 
 class Master extends Component {
 state={
@@ -17,9 +15,10 @@ state={
   modalEliminar: false,
   form:{
     id: '',
-    ApellidoM: '',
-    ApellidoP: '',
-    nombre: ''
+    apellidoP: '',
+    apellidoM: '',
+    nombre: '',
+    RFC: '',
   }
 }
 onChange = async e =>{
@@ -32,6 +31,7 @@ peticionGet=()=>{
 axios.get(url).then(response=>{
   this.setState({data: response.data});
   console.log(response.data);
+
 }).catch(error=>{
   console.log(error.message);
 })
@@ -70,9 +70,10 @@ seleccionarMaestro=(maestro)=>{
     tipoModal: 'actualizar',
     form: {
         id: maestro.id,
-        ApellidoM:maestro.ApellidoM,
-        ApellidoP: maestro.ApellidoP,
-        nombre: maestro.nombre
+        apellidoM:maestro.apellidoM,
+        apellidoP: maestro.apellidoP,
+        nombre: maestro.nombre,
+        RFC: maestro.RFC,
     }
   })
 }
@@ -94,19 +95,26 @@ console.log(this.state.form);
   componentDidMount() {
     this.peticionGet();
   }
-  
-
   render(){
     const {form}=this.state;
   return (
-    <> <div className='search'>
-      <Search   placeholder='Buscar Docente' value= {this.state.result} onChange={this.onChange}/>
-      </div> 
+    <> 
+    <div className='container'>
+ 
     <div className="App">
-    
-    <br /><br /><br />
-  <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Maestro</button>
-  <br /><br />
+    <h2>Maestros</h2>
+    <br />
+
+  <div class="mb-3 row">
+    <div class="col-sm-4">
+    <input type="text" class="form-control" placeholder='Buscar Docente' value= {this.state.result} onChange={this.onChange}/>
+    </div>
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4">
+    <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Maestro</button>
+    </div>
+    </div>
     <table className="table" class="table table-striped table-hover">
       <thead>
         <tr>
@@ -114,6 +122,7 @@ console.log(this.state.form);
           <th>Apellido P</th>
           <th>ApellidoM</th>
           <th>Nombre</th>
+          <th>RFC</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -124,9 +133,10 @@ console.log(this.state.form);
           return(
             <tr>
           <td>{maestro.id}</td>
-          <td>{maestro.ApellidoP}</td>
-          <td>{maestro.ApellidoM}</td>
+          <td>{maestro.apellidoP}</td>
+          <td>{maestro.apellidoM}</td>
           <td>{maestro.nombre}</td>
+          <td>{maestro.RFC}</td>
           <td>
                 <button className="btn btn-primary" onClick={()=>{this.seleccionarMaestro(maestro); this.modalInsertar()}}>Actualizar</button>
                 {"   "}
@@ -137,9 +147,6 @@ console.log(this.state.form);
         })}
       </tbody>
     </table>
-
-
-
     <Modal isOpen={this.state.modalInsertar}>
                 <ModalHeader style={{display: 'block'}}>
                   <span style={{float: 'right'}} onClick={()=>this.modalInsertar()}>x</span>
@@ -151,16 +158,20 @@ console.log(this.state.form);
                     onChange={this.handleChange} value={form?form.id: this.state.data.length+1}/>
                     <br />
                     <label htmlFor="nombre">ApellidoP</label>
-                    <input className="form-control" type="text" name="ApellidoP" id="ApellidoP"
-                     onChange={this.handleChange} value={form?form.ApellidoP: ''}/>
+                    <input className="form-control" type="text" name="apellidoP" id="apellidoP"
+                     onChange={this.handleChange} value={form?form.apellidoP: ''}/>
                     <br />
                     <label htmlFor="nombre">ApellidoM</label>
-                    <input className="form-control" type="text" name="ApellidoM" id="ApellidoM"
-                     onChange={this.handleChange} value={form?form.ApellidoM: ''}/>
+                    <input className="form-control" type="text" name="apellidoM" id="apellidoM"
+                     onChange={this.handleChange} value={form?form.apellidoM: ''}/>
                     <br />
                     <label htmlFor="nombre">Nombre</label>
                     <input className="form-control" type="text" name="nombre" id="nombre"
                      onChange={this.handleChange} value={form?form.nombre: ''}/>
+                    <br />
+                    <label htmlFor="nombre">RFC</label>
+                    <input className="form-control" type="text" name="RFC" id="RFC"
+                     onChange={this.handleChange} value={form?form.RFC: ''}/>
                     <br />
                   </div>
                 </ModalBody>
@@ -189,7 +200,7 @@ console.log(this.state.form);
           </Modal>
   </div>
 
-
+  </div>
   </>
   );
 }

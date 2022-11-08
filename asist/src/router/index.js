@@ -1,5 +1,4 @@
 import Home from '../pages/Home'
-import About from '../pages/About'
 import Users from '../pages/Users'
 import Alumnos from '../pages/Alumnos'
 import Grupo from '../pages/Grupo'
@@ -15,7 +14,6 @@ import Listas from '../pages/Listas'
 // import UserEdit from '../pages/Users/edit'
 
 const routes = [
-  { name: 'About', path: '/about', component: About },
   { name: 'Users', path: '/users', component: Users },
   { name: 'Asistencia', path: '/asistencia', component: Asistencia },
   { name: 'Alumnos', path: '/alumnos', component: Alumnos },

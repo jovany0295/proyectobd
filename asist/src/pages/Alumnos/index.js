@@ -1,162 +1,235 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import { DataGrid } from '@mui/x-data-grid';
-import Input from '@mui/material/Input';
-import TextField from '@mui/material/TextField';
-import FilledInput from '@mui/material/FilledInput';
-import FormHelperText from '@mui/material/FormHelperText';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import IconButton from '@mui/material/IconButton';
+import React, { Component, useState } from 'react';
+import './App.css';
+import axios from "axios";
+import "bootstrap/dist/js/bootstrap.js";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import Search from '../../components/Search';
 
+const url="http://127.0.0.1:8000/bd/v1/Alumno/";
+const urlCarrera="http://127.0.0.1:8000/bd/v1/Carrera/";
 
-const ariaLabel = { 'aria-label': 'description' };
-
-const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'firstName', headerName: 'First name', width: 130 },
-  { field: 'lastName', headerName: 'Last name', width: 130 },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 90,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-  },
-];
-
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
-
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 50,
-  p: 3,
-  display: 'flex', flexWrap: 'wrap',
-  width: 500,
-        maxWidth: '100%',
-  
-};
-
-export default function BasicModal() {
-    const [values, setValues] = React.useState({
-        amount: '',
-        password: '',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-      });
-    
-    
-    
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [nombre, setName] = React.useState('');
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-  return (
-    <div>
-        <Button sx={{ marginLeft:70}}   onClick={handleOpen} variant="contained" disableElevation>
-      Agregar alumno
-    </Button>
-     
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box  component="form"
-      sx={ style
-      }
-      noValidate
-      autoComplete="off">
-     
-     <div>
-       
-       
-        <FormControl fullWidth sx={{ m: 1 }}>
-          <InputLabel htmlFor="outlined-adornment-amount">Nombre</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-           
-            onChange={handleChange('amount')}
-            startAdornment={<InputAdornment position="start"></InputAdornment>}
-            label="Amount"
-          />
-        </FormControl>
-     
-        <FormControl fullWidth sx={{ m: 1,width: '25ch' }}>
-          <InputLabel htmlFor="outlined-adornment-amount">Apellido Paterno</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-            
-            onChange={handleChange('amount')}
-            startAdornment={<InputAdornment position="start"></InputAdornment>}
-            label="Amount"
-            size="small"
-          />
-        </FormControl>
-        <FormControl fullWidth sx={{ m: 1,width: '25ch'  }}>
-          <InputLabel htmlFor="outlined-adornment-amount">Apellido Materno</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-       
-            onChange={handleChange('amount')}
-            startAdornment={<InputAdornment position="start"></InputAdornment>}
-            label="Amount"
-            size="small"
-          />
-        </FormControl>
-        
-      </div>
-      
-      
-        </Box>
-      </Modal>
-      <div  style={{ height: 400, width: '100%' }}>
-      <DataGrid sx={{ marginLeft:8}} 
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-      />
-    </div>
-      
-    </div>
-  );
+class Alumnos extends Component {
+state={
+  result:'',
+  data:[],
+  dataCarrera:[],
+  modalInsertar: false,
+  modalEliminar: false,
+  form:{
+    id: '',
+    apellidoP: '',
+    apellidoM: '',
+    nombre: '',
+    semestre: '',
+    CURP:'',
+    id_carrera: ''
+  }
 }
+onChange = async e =>{
+  e.persist();
+  await this.setState({result: e.target.value});
+  console.log(this.state.result);
+}
+
+peticionGet=()=>{
+axios.get(url).then(response=>{
+  this.setState({data: response.data});
+}).catch(error=>{
+  console.log(error.message);
+})
+}
+peticionGetCarrera=()=>{
+  axios.get(urlCarrera).then(response=>{
+    this.setState({dataCarrera: response.data});
+  }).catch(error=>{
+    console.log(error.message);
+  })
+}
+
+peticionPost=async()=>{
+  delete this.state.form.id;
+ await axios.post(url,this.state.form).then(response=>{
+    this.modalInsertar();
+    this.peticionGet();
+  }).catch(error=>{
+    console.log(error.message);
+  })
+}
+
+peticionPut=()=>{
+  axios.put(url+this.state.form.id+'/', this.state.form).then(response=>{
+    this.modalInsertar();
+    this.peticionGet();
+  })
+}
+
+peticionDelete=()=>{
+  axios.delete(url+this.state.form.id).then(response=>{
+    this.setState({modalEliminar: false});
+    this.peticionGet();
+  })
+}
+
+modalInsertar=()=>{
+  this.setState({modalInsertar: !this.state.modalInsertar});
+}
+
+seleccionarAlumno=(alumno)=>{
+  this.setState({
+    tipoModal: 'actualizar',
+    form: {
+      id: alumno.id,
+      apellidoP: alumno.apellidoP,
+      apellidoM: alumno.apellidoM,
+      nombre: alumno.nombre,
+      CURP:alumno.CURP,
+      semestre: alumno.semestre,
+      carrera: alumno.carrera
+    }
+  })
+}
+
+handleChange=async e=>{
+e.persist();
+await this.setState({
+  form:{
+    ...this.state.form,
+    [e.target.name]: e.target.value
+  }
+});
+console.log(this.state.form);
+}
+
+componentDidMount() {
+    this.peticionGet();
+    this.peticionGetCarrera();
+}
+
+  render(){
+    const {form}=this.state;
+  return (
+    <>  
+    <div className='container'>
+    <div className="App">
+    <h2>Alumnos</h2>
+    <br />
+
+  <div class="mb-3 row">
+    <div class="col-sm-4">
+    <input type="text" class="form-control" placeholder='Buscar Docente' value= {this.state.result} onChange={this.onChange}/>
+    </div>
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4">
+    <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Alumno</button>
+    </div>
+    </div>
+    <table className="table " class="table table-striped table-hover"> 
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Apellido P</th>
+          <th>ApellidoM</th>
+          <th>Nombre</th>
+          <th>semestre</th>
+          <th>CURP</th>
+          <th>carrera</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+        this.state.data.filter(alumno => alumno.nombre.toLowerCase()
+        .indexOf(this.state.result.toLowerCase()) > -1)
+        .map(alumno=>{
+          return(
+            <tr>
+          <td>{alumno.id}</td>
+          <td>{alumno.apellidoP}</td>
+          <td>{alumno.apellidoM}</td>
+          <td>{alumno.nombre}</td>
+          <td>{alumno.semestre}</td>
+          <td>{alumno.CURP}</td>
+          <td>{alumno.carrera}</td>
+          <td>
+                <button className="btn btn-primary" onClick={()=>{this.seleccionarAlumno(alumno); this.modalInsertar()}}>Actualizar</button>
+                {"   "}
+                <button className="btn btn-danger" onClick={()=>{this.seleccionarAlumno(alumno); this.setState({modalEliminar: true})}}>Eliminar</button>
+                </td>
+          </tr>
+          )
+        })}
+      </tbody>
+    </table>
+    <Modal isOpen={this.state.modalInsertar}>
+                <ModalHeader style={{display: 'block'}}>
+                  <span style={{float: 'right'}} onClick={()=>this.modalInsertar()}>x</span>
+                </ModalHeader>
+                <ModalBody>
+                  <div className="form-group">
+                    <label htmlFor="id">ID</label>
+                    <input className="form-control" type="text" name="id" id="id" readOnly 
+                    onChange={this.handleChange} value={form?form.id: this.state.data.length+1}/>
+                    <br />
+                    <label htmlFor="nombre">ApellidoP</label>
+                    <input className="form-control" type="text" name="ApellidoP" id="ApellidoP"
+                     onChange={this.handleChange} value={form?form.apellidoP: ''}/>
+                    <br />
+                    <label htmlFor="nombre">ApellidoM</label>
+                    <input className="form-control" type="text" name="ApellidoM" id="ApellidoM"
+                     onChange={this.handleChange} value={form?form.apellidoM: ''}/>
+                    <br />
+                    <label htmlFor="nombre">Nombre</label>
+                    <input className="form-control" type="text" name="nombre" id="nombre"
+                     onChange={this.handleChange} value={form?form.nombre: ''}/>
+                    <br />
+                    <label htmlFor="CURP">CURP</label>
+                    <input className="form-control" type="text" name="CURP" id="CURP"
+                     onChange={this.handleChange} value={form?form.CURP: ''}/>
+                    <br />
+                    <label htmlFor="nombre">semestre</label>
+                    <input className="form-control" type="number" name="semestre" id="semestre" 
+                    onChange={this.handleChange} value={form?form.semestre: ''}/>
+                    <br />
+                    <label htmlFor="nombre">carrera</label>
+                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" 
+                     name="carrera" id="carrera" onChange={this.handleChange}>
+                      {this.state.dataCarrera.map(carrera=>(
+                      <option 
+                        key = {carrera.id} 
+                        value={carrera.id}
+                        selected={ this.state.form.id_carrera==carrera.id?'selected':''}
+                      >{carrera.nombre}</option>))
+                      }
+                      </select>
+                    <br />
+                  </div>
+                </ModalBody>
+
+                <ModalFooter>
+                  {this.state.tipoModal==='insertar'?
+                    <button className="btn btn-success" onClick={()=>this.peticionPost()}>
+                    Insertar
+                  </button>: <button className="btn btn-primary" onClick={()=>this.peticionPut()}>
+                    Actualizar
+                  </button>
+                  } 
+                    <button className="btn btn-danger" onClick={()=>this.modalInsertar()}>Cancelar</button>
+                </ModalFooter>
+          </Modal>
+              <Modal isOpen={this.state.modalEliminar}>
+                <ModalBody>
+                  Estás seguro que deseas eliminar al alumno{form && form.nombre}
+                </ModalBody>
+                <ModalFooter>
+                  <button className="btn btn-danger" onClick={()=>this.peticionDelete()}>Sí</button>
+                  <button className="btn btn-secundary" onClick={()=>this.setState({modalEliminar: false})}>No</button>
+                </ModalFooter>
+              </Modal>
+      </div>
+      </div>
+    </>
+    );  
+  }
+}
+export default Alumnos;
