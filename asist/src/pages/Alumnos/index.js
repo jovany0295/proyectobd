@@ -42,7 +42,7 @@ class Alumnos extends Component {
   peticionGetCarrera = () => {
     axios.get(urlCarrera).then(response => {
       this.setState({ dataCarrera: response.data });
-      console.log(response.dataCarrera.id)
+
     }).catch(error => {
       console.log(error.message);
     })

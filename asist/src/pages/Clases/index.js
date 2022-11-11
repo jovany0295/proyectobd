@@ -143,128 +143,138 @@ class Alumnos extends Component {
   render() {
     const { form } = this.state;
     return (
-      <> <div className='container'>
-        <Search placeholder='Buscar Clase' value={this.state.result} onChange={this.onChange} />
-        <div className="App">
-          <br /><br /><br />
-          <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Nueva Clase</button>
-          <br /><br />
-          <table className="table " class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Horario</th>
-                <th>Carrera</th>
-                <th>Maestro</th>
-                <th>Periodo</th>
-                <th>Grupo</th>
-                <th>Materia</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.data.filter(clase => clase.nombre.toLowerCase()
-                .indexOf(this.state.result.toLowerCase()) > -1)
-                .map(clase => {
-                  return (
-                    <tr>
-                      <td>{clase.id}</td>
-                      <td>{clase.nombre}</td>
-                      <td>{clase.horario}</td>
-                      <td>{clase.idCarrera}</td>
-                      <td>{clase.idMaestro}</td>
-                      <td>{clase.idPeriodo}</td>
-                      <td>{clase.idGrupo}</td>
-                      <td>{clase.idMateria}</td>
-                      <td>
-                        <button className="btn btn-primary" onClick={() => { this.seleccionarAlumno(clase); this.modalInsertar() }}>Actualizar</button>
-                        {"   "}
-                        <button className="btn btn-danger" onClick={() => { this.seleccionarAlumno(clase); this.setState({ modalEliminar: true }) }}>Eliminar</button>
-                      </td>
-                    </tr>
-                  )
-                })}
-            </tbody>
-          </table>
-          <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
-
-            <ModalBody>
-              <div className="form-group">
-                <label htmlFor="id">ID</label>
-                <input className="form-control" type="text" name="id" id="id" readOnly
-                  onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
-                <br />
-                <label htmlFor="nombre">Nombre</label>
-                <input className="form-control" type="text" name="nombre" id="nombre"
-                  onChange={this.handleChange} value={form ? form.nombre : ''} />
-                <br />
-                <label htmlFor="nombre">Horario</label>
-                <input className="form-control" type="text" name="horario" id="horario"
-                  onChange={this.handleChange} value={form ? form.horario : ''} />
-                <br />
-                <label htmlFor="nombre">carrera</label>
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                  name="idCarrera" id="idCarrera" onChange={this.handleChange}>
-                  {this.state.dataCarrera.map(carrera => (
-                    <option key={carrera.id} value={carrera.id}>{carrera.nombre}</option>))
-                  }
-                </select>
-                <br />
-                <label htmlFor="nombre">Maestro</label>
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                  name="idMaestro" id="idMaestro" onChange={this.handleChange}>
-                  {this.state.dataMaestro.map(maestro => (
-                    <option key={maestro.id} value={maestro.id}>{maestro.nombre}</option>))
-                  }
-                </select>
-                <br />
-                <label htmlFor="nombre">Periodo</label>
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                  name="idPeriodo" id="idPeriodo" onChange={this.handleChange}>
-                  {this.state.dataPeriodo.map(periodo => (
-                    <option key={periodo.id} value={periodo.id}>{periodo.Descripcion}</option>))
-                  }
-                </select>
-                <br />
-                <label htmlFor="nombre">Grupo</label>
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                  name="idGrupo" id="idGrupo" onChange={this.handleChange}>
-                  {this.state.dataGrupo.map(grupo => (
-                    <option key={grupo.id} value={grupo.id}>{grupo.nombre}</option>))
-                  }
-                </select>
-                <br />
-                <label htmlFor="nombre">Materia</label>
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                  name="idMateria" id="idMateria" onChange={this.handleChange}>
-                  {this.state.dataMateria.map(materia => (
-                    <option key={materia.id} value={materia.id}>{materia.nombre}</option>))
-                  }
-                </select>
+      <>
+        <div className='container'>
+          <div className="App">
+            <h2>Clases</h2>
+            <br />
+            <div class="mb-3 row">
+              <div class="col-sm-4">
+                <input type="text" class="form-control" placeholder='Buscar Clase' value={this.state.result} onChange={this.onChange} />
               </div>
-            </ModalBody>
-            <ModalFooter>
-              {this.state.tipoModal == 'insertar' ?
-                <button className="btn btn-success" onClick={() => this.peticionPost()}>
-                  Insertar
-                </button> : <button className="btn btn-primary" onClick={() => this.peticionPut()}>
-                  Actualizar
-                </button>
-              }
-              <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
-            </ModalFooter>
-          </Modal>
-          <Modal className='ajustarmodal' isOpen={this.state.modalEliminar}>
-            <ModalBody>
-              Estás seguro que deseas eliminar al alumno de la clase: <br />{form && form.nombre}
-            </ModalBody>
-            <ModalFooter>
-              <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>
-              <button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>No</button>
-            </ModalFooter>
-          </Modal>
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-4">
+                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Nueva Clase</button>
+              </div>
+            </div>
+            <br /><br />
+            <table className="table " class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Horario</th>
+                  <th>Carrera</th>
+                  <th>Maestro</th>
+                  <th>Periodo</th>
+                  <th>Grupo</th>
+                  <th>Materia</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.data.filter(clase => clase.nombre.toLowerCase()
+                  .indexOf(this.state.result.toLowerCase()) > -1)
+                  .map(clase => {
+                    return (
+                      <tr>
+                        <td>{clase.id}</td>
+                        <td>{clase.nombre}</td>
+                        <td>{clase.horario}</td>
+                        <td>{clase.idCarrera}</td>
+                        <td>{clase.idMaestro}</td>
+                        <td>{clase.idPeriodo}</td>
+                        <td>{clase.idGrupo}</td>
+                        <td>{clase.idMateria}</td>
+                        <td>
+                          <button className="btn btn-primary" onClick={() => { this.seleccionarAlumno(clase); this.modalInsertar() }}>Actualizar</button>
+                          {"   "}
+                          <button className="btn btn-danger" onClick={() => { this.seleccionarAlumno(clase); this.setState({ modalEliminar: true }) }}>Eliminar</button>
+                        </td>
+                      </tr>
+                    )
+                  })}
+              </tbody>
+            </table>
+            <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
+
+              <ModalBody>
+                <div className="form-group">
+                  <label htmlFor="id">ID</label>
+                  <input className="form-control" type="text" name="id" id="id" readOnly
+                    onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
+                  <br />
+                  <label htmlFor="nombre">Nombre</label>
+                  <input className="form-control" type="text" name="nombre" id="nombre"
+                    onChange={this.handleChange} value={form ? form.nombre : ''} />
+                  <br />
+                  <label htmlFor="nombre">Horario</label>
+                  <input className="form-control" type="text" name="horario" id="horario"
+                    onChange={this.handleChange} value={form ? form.horario : ''} />
+                  <br />
+                  <label htmlFor="nombre">carrera</label>
+                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                    name="idCarrera" id="idCarrera" onChange={this.handleChange}>
+                    {this.state.dataCarrera.map(carrera => (
+                      <option key={carrera.id} value={carrera.id}>{carrera.nombre}</option>))
+                    }
+                  </select>
+                  <br />
+                  <label htmlFor="nombre">Maestro</label>
+                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                    name="idMaestro" id="idMaestro" onChange={this.handleChange}>
+                    {this.state.dataMaestro.map(maestro => (
+                      <option key={maestro.id} value={maestro.id}>{maestro.nombre}</option>))
+                    }
+                  </select>
+                  <br />
+                  <label htmlFor="nombre">Periodo</label>
+                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                    name="idPeriodo" id="idPeriodo" onChange={this.handleChange}>
+                    {this.state.dataPeriodo.map(periodo => (
+                      <option key={periodo.id} value={periodo.id}>{periodo.Descripcion}</option>))
+                    }
+                  </select>
+                  <br />
+                  <label htmlFor="nombre">Grupo</label>
+                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                    name="idGrupo" id="idGrupo" onChange={this.handleChange}>
+                    {this.state.dataGrupo.map(grupo => (
+                      <option key={grupo.id} value={grupo.id}>{grupo.nombre}</option>))
+                    }
+                  </select>
+                  <br />
+                  <label htmlFor="nombre">Materia</label>
+                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                    name="idMateria" id="idMateria" onChange={this.handleChange}>
+                    {this.state.dataMateria.map(materia => (
+                      <option key={materia.id} value={materia.id}>{materia.nombre}</option>))
+                    }
+                  </select>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                {this.state.tipoModal == 'insertar' ?
+                  <button className="btn btn-success" onClick={() => this.peticionPost()}>
+                    Insertar
+                  </button> : <button className="btn btn-primary" onClick={() => this.peticionPut()}>
+                    Actualizar
+                  </button>
+                }
+                <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
+              </ModalFooter>
+            </Modal>
+            <Modal className='ajustarmodal' isOpen={this.state.modalEliminar}>
+              <ModalBody>
+                Estás seguro que deseas eliminar al alumno de la clase: <br />{form && form.nombre}
+              </ModalBody>
+              <ModalFooter>
+                <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>
+                <button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>No</button>
+              </ModalFooter>
+            </Modal>
+          </div>
         </div>
-      </div>
 
       </>
     );
