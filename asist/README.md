@@ -2,6 +2,32 @@
 Jovany Yair Patiño Rayo
 
 
+
+
+<p style='text-align: center;'> Documentación Técnica PoC Risk Calculator para Nubentos.
+
+
+Tabla de Contenidos
+1. Tecnologías utilizadas	
+2. Instalación y ejecución del proyecto
+    2.1 Configuración	
+3. Estructura de carpetas
+4. Plantilla general del portal
+5. Uso
+    5.1 Datos de configuración	
+6. Resultados	
+<br /> <br />
+
+1. Tecnologías Utilizadas
+<div style='text-align: justify;'> Para la construcción del Front-End del portal Web, se utilizaron las siguientes librerías: </div>
+
+react v17.0.2 (Librería utilizada para la construcción de sitios web dinámicos)
+chart.js v3.7.1 (Librería de Javascript utilizará para generar gráficos)
+formik v2.2.9 (Librería utilizada para controlar el estado de los formularios en React)
+yup 0.32.11 (Librería utilizada para realizar validaciones de los formularios)
+axios v0.26.1 (Librería utilizada para hacer las peticiones hacia las APIs que serán utilizadas) <br /> <div style='text-align: justify;'> Existen más librerías dentro del proyecto, que pueden ser visualizadas en el archivo package.json, pero en general, las mencionadas previamente, son las más importantes. </div>
+
+
 # Instalación
 Suponiendo que ya se tiene instalado NodeJs, solo se clona el proyecto y se realiza lo siguiente
 
