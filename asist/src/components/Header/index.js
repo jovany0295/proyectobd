@@ -137,6 +137,11 @@ export default function MiniDrawer() {
  const handleClickHome = () => {
    navigate('/');
  }
+
+ const handleClickPeriodo = () => {
+  navigate('/Periodo');
+}
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -216,13 +221,13 @@ export default function MiniDrawer() {
         </ListItemIcon>
         <ListItemText primary="Reunion" />
       </ListItemButton>
-      <ListItemButton onClick={ () => handleClickGrupos()} >
+      <ListItemButton onClick={ () => handleClickClase()} >
         <ListItemIcon>
           <GroupsIcon/>
         </ListItemIcon>
         <ListItemText primary="Asistencia" />
       </ListItemButton>
-        <ListItemButton onClick={ () => handleClickGrupos()} >
+        <ListItemButton onClick={ () => handleClickPeriodo()} >
         <ListItemIcon>
           <GroupsIcon/>
         </ListItemIcon>
