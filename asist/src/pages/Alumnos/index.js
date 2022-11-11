@@ -205,7 +205,7 @@ componentDidMount() {
                     <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" 
                      name="id_carrera" id="id_carrera" onChange={this.handleChange}>
                       {this.state.dataCarrera.map(carrera=>(
-                      <option key={carrera.id} value={carrera.id}>{carrera.nombre}</option>))
+                      <option key={carrera.id} value={carrera.id}  selected={carrera == carrera.value}>{carrera.nombre}</option>))
                       }
                       </select>
                     <br />
