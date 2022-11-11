@@ -1,8 +1,7 @@
 # Integrantes
 Jovany Yair Patiño Rayo
-<p style='text-align: center;'> Documentación Técnica PoC Risk Calculator para Nubentos.
-<p style='text-align: right;'> Construcción del Front-End Marzo 2022.
-<div style='text-align:center;'> <img src="./img-readme/logo-cloudappi.png" alt="CloudAppi" width="300px"> </div>
+<p style='text-align: center;'> Documentación Técnica sistema de asistencia.
+<p style='text-align: right;'> Construcción del Front-End Noviembre 2022.
 <br /> <br /> <br />
 
 Tabla de Contenidos
@@ -10,34 +9,56 @@ Tabla de Contenidos
 2. Instalación y ejecución del proyecto
     2.1 Configuración	
 3. Estructura de carpetas
-4. Plantilla general del portal
-5. Uso
-    5.1 Datos de configuración	
-6. Resultados	
+4. Uso
+5 Datos de configuración	
+
 <br /> <br />
 
 1. Tecnologías Utilizadas
 <div style='text-align: justify;'> Para la construcción del Front-End del portal Web, se utilizaron las siguientes librerías: </div>
 
-react v17.0.2 (Librería utilizada para la construcción de sitios web dinámicos)
-chart.js v3.7.1 (Librería de Javascript utilizará para generar gráficos)
-formik v2.2.9 (Librería utilizada para controlar el estado de los formularios en React)
-yup 0.32.11 (Librería utilizada para realizar validaciones de los formularios)
-axios v0.26.1 (Librería utilizada para hacer las peticiones hacia las APIs que serán utilizadas) <br /> <div style='text-align: justify;'> Existen más librerías dentro del proyecto, que pueden ser visualizadas en el archivo package.json, pero en general, las mencionadas previamente, son las más importantes. </div>
+react v11.10.4 (Librería utilizada para la construcción de sitios web dinámicos)
+Material-Ui(Framework de estilos)
+Reactstrap(Framework de estilos)
 
-# Instalación
-Suponiendo que ya se tiene instalado NodeJs, solo se clona el proyecto y se realiza lo siguiente
+2. Instalación y ejecución del proyecto
+Para llevar a cabo la instalación del proyecto, solo es necesario ejecutar los siguientes comandos:
 
-npm install //Instalar los paquetes y dependencias de NodeJs
-
-# Framework de Estilos 
+git clone  https://github.com/jovany0295/proyectobd.git
+cd asist 
+git fetch
+git checkout integracion
+npm install
 npm install @mui/material @emotion/react @emotion/styled
 npm install @mui/material @mui/styled-engine-sc styled-components
 npm install @mui/icons-material
-
-Por dificultades optamos por utilizar a la par los estilos de boostrap 
-
 npm install reactstrap react react-dom
+npm start
+
+
+2.1 Configuración
+Como tal no hay una configuracion especifica a excepcion de la API
+
+3. Estructura de carpetas
+El proyecto cuenta con la siguiente estructura de carpetas
+
+<div style = 'text-align:center;'> <img src="./img-readme/estructura-carpetas.png" alt="CloudAppi" width="300px"> </div>
+
+App Esta carpeta contiene la estructura global del proyecto, en otras palabras, la plantilla.
+assets Contiene estilos globales como las tipografías, y las clases para mostrar los errores con CSS.
+components En esta carpeta se almacenan todos los componentes de la aplicación.
+pages Se almacenan los contenedores de cada página del proyecto.
+router Encargado de manejar las URL que son escritas por el cliente y redireccionar hacia la pagina correcta.
+
+
+
+4. Uso
+<div style = 'text-align: justify;'> Al ingresar, se muestra el dashboard, el cual aun esta en desarollo:</div>
+
+Las vistas funcionales son Alumno, Maestros, Grupo, Materia, Periodo
+En las cuales se realiza un CRUD
+
+<br />
 
 # Getting Started with Create React App
 
