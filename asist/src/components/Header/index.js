@@ -137,6 +137,15 @@ export default function MiniDrawer() {
  const handleClickHome = () => {
    navigate('/');
  }
+
+ const handleClickPeriodos = () => {
+  navigate('/Periodos');
+}
+
+const handleClickReunion = () => {
+  navigate('/Reunion');
+}
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -229,6 +238,27 @@ export default function MiniDrawer() {
         <ListItemText primary="Grupos" />
       </ListItemButton>
       <ListItemButton onClick={ () => handleClicklistas()} >
+        <ListItemIcon>
+          <AttachFileIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Carga File" />
+      </ListItemButton>
+
+      <ListItemButton onClick={ () => handleClickMaterias()} >
+        <ListItemIcon>
+          <AttachFileIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Carga File" />
+      </ListItemButton>
+
+      <ListItemButton onClick={ () => handleClickPeriodos()} >
+        <ListItemIcon>
+          <AttachFileIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Carga File" />
+      </ListItemButton>
+
+      <ListItemButton onClick={ () => handleClickReunion()} >
         <ListItemIcon>
           <AttachFileIcon/>
         </ListItemIcon>

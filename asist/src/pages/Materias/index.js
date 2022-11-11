@@ -4,7 +4,7 @@ import axios from "axios";
 import Search from '../../components/Search';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
-const url="http://127.0.0.1:8000/drey/v1/Materia/";
+const url="http://127.0.0.1:8000/bd/v1/Materia/";
 
 class Materias extends Component {
 state={
@@ -13,9 +13,9 @@ state={
   modalInsertar: false,
   modalEliminar: false,
   form:{
-    id: '',
+    id:'', 
     Nombre:'',
-    descripcion: ''
+    descripcion:''
   }
 }
 onChange = async e =>{
@@ -80,10 +80,9 @@ console.log(this.state.form);
   render(){
     const {form}=this.state;
   return (
-    <><div className='search'>
-    <Search   placeholder='Buscar Materia' value= {this.state.result} onChange={this.onChange}/>
-    </div> 
-    <div className="App">
+    <>
+    <div className="App container">
+    <Search  className='search'  placeholder='Buscar Materia' value= {this.state.result} onChange={this.onChange}/>
     <br /><br /><br />
   <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Materia</button>
   <br /><br />
@@ -115,7 +114,7 @@ console.log(this.state.form);
         })}
       </tbody>
     </table>
-    <Modal isOpen={this.state.modalInsertar}>
+    <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
                 <ModalHeader style={{display: 'block'}}>
                   <span style={{float: 'right'}} onClick={()=>this.modalInsertar()}>x</span>
                 </ModalHeader>
