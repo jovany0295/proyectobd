@@ -40,9 +40,7 @@ export default function DataTable() {
         rowsPerPageOptions={[5]}
         checkboxSelection
       />
-      <Button variant="contained" disableElevation>
-  Asignar
-</Button>
+      
     </div>
   );
 }

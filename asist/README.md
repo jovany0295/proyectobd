@@ -2,15 +2,19 @@
 Jovany Yair Patiño Rayo
 
 
-
-
-
-
-
 # Instalación
+Suponiendo que ya se tiene instalado NodeJs, solo se clona el proyecto y se realiza lo siguiente
 
-npm install
+npm install //Instalar los paquetes y dependencias de NodeJs
 
+# Framework de Estilos 
+npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/material @mui/styled-engine-sc styled-components
+npm install @mui/icons-material
+
+Por dificultades optamos por utilizar a la par los estilos de boostrap 
+
+npm install reactstrap react react-dom
 
 # Getting Started with Create React App
 
