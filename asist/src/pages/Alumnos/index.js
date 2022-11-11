@@ -22,7 +22,8 @@ state={
     nombre: '',
     semestre: '',
     CURP:'',
-    id_carrera: ''
+    correo:'',
+    id_carrera: '',
   }
 }
 onChange = async e =>{
@@ -41,6 +42,7 @@ axios.get(url).then(response=>{
 peticionGetCarrera=()=>{
   axios.get(urlCarrera).then(response=>{
     this.setState({dataCarrera: response.data});
+    console.log(response.dataCarrera.id)
   }).catch(error=>{
     console.log(error.message);
   })
@@ -84,7 +86,8 @@ seleccionarAlumno=(alumno)=>{
       nombre: alumno.nombre,
       CURP:alumno.CURP,
       semestre: alumno.semestre,
-      carrera: alumno.carrera
+      correo: alumno.correo,
+      id_carrera: alumno.id_carrera,
     }
   })
 }
@@ -116,7 +119,7 @@ componentDidMount() {
 
   <div class="mb-3 row">
     <div class="col-sm-4">
-    <input type="text" class="form-control" placeholder='Buscar Docente' value= {this.state.result} onChange={this.onChange}/>
+    <input type="text" class="form-control" placeholder='Buscar Alumno' value= {this.state.result} onChange={this.onChange}/>
     </div>
     <div class="col-sm-4">
     </div>
@@ -134,6 +137,7 @@ componentDidMount() {
           <th>semestre</th>
           <th>CURP</th>
           <th>carrera</th>
+          <th>correo</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -151,6 +155,7 @@ componentDidMount() {
           <td>{alumno.semestre}</td>
           <td>{alumno.CURP}</td>
           <td>{alumno.carrera}</td>
+          <td>{alumno.correo}</td>
           <td>
                 <button className="btn btn-primary" onClick={()=>{this.seleccionarAlumno(alumno); this.modalInsertar()}}>Actualizar</button>
                 {"   "}
@@ -161,7 +166,8 @@ componentDidMount() {
         })}
       </tbody>
     </table>
-    <Modal isOpen={this.state.modalInsertar}>
+    <div >
+    <Modal className='ajustarmodal' isOpen={this.state.modalInsertar} >
                 <ModalHeader style={{display: 'block'}}>
                   <span style={{float: 'right'}} onClick={()=>this.modalInsertar()}>x</span>
                 </ModalHeader>
@@ -172,11 +178,11 @@ componentDidMount() {
                     onChange={this.handleChange} value={form?form.id: this.state.data.length+1}/>
                     <br />
                     <label htmlFor="nombre">ApellidoP</label>
-                    <input className="form-control" type="text" name="ApellidoP" id="ApellidoP"
+                    <input className="form-control" type="text" name="apellidoP" id="apellidoP"
                      onChange={this.handleChange} value={form?form.apellidoP: ''}/>
                     <br />
                     <label htmlFor="nombre">ApellidoM</label>
-                    <input className="form-control" type="text" name="ApellidoM" id="ApellidoM"
+                    <input className="form-control" type="text" name="apellidoM" id="apellidoM"
                      onChange={this.handleChange} value={form?form.apellidoM: ''}/>
                     <br />
                     <label htmlFor="nombre">Nombre</label>
@@ -191,15 +197,15 @@ componentDidMount() {
                     <input className="form-control" type="number" name="semestre" id="semestre" 
                     onChange={this.handleChange} value={form?form.semestre: ''}/>
                     <br />
+                    <label htmlFor="correo">correo</label>
+                    <input className="form-control" type="email" name="correo" id="correo" 
+                    onChange={this.handleChange} value={form?form.correo: ''}/>
+                    <br />
                     <label htmlFor="nombre">carrera</label>
                     <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" 
-                     name="carrera" id="carrera" onChange={this.handleChange}>
+                     name="id_carrera" id="id_carrera" onChange={this.handleChange}>
                       {this.state.dataCarrera.map(carrera=>(
-                      <option 
-                        key = {carrera.id} 
-                        value={carrera.id}
-                        selected={ this.state.form.id_carrera==carrera.id?'selected':''}
-                      >{carrera.nombre}</option>))
+                      <option key={carrera.id} value={carrera.id}>{carrera.nombre}</option>))
                       }
                       </select>
                     <br />
@@ -226,6 +232,7 @@ componentDidMount() {
                   <button className="btn btn-secundary" onClick={()=>this.setState({modalEliminar: false})}>No</button>
                 </ModalFooter>
               </Modal>
+              </div>
       </div>
       </div>
     </>

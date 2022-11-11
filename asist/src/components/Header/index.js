@@ -26,7 +26,13 @@ import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
-
+import SchoolIcon from '@mui/icons-material/School';
+import GroupsIcon from '@mui/icons-material/Groups';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import Person3Icon from '@mui/icons-material/Person3';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -122,6 +128,9 @@ export default function MiniDrawer() {
  const handleClickAsistencia = () => {
    navigate('/Asistencia');
  }
+ const handleClicklistas = () => {
+  navigate('/listas');
+}
  const handleClickClase = () => {
    navigate('/Clase');
  }
@@ -165,25 +174,25 @@ export default function MiniDrawer() {
     >
       <ListItemButton onClick={ () => handleClickHome()}>
         <ListItemIcon>
-          <SendIcon />
+          <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
       <ListItemButton onClick={ () => handleClickAlumnos()}>
         <ListItemIcon>
-          <SendIcon />
+          <SchoolIcon />
         </ListItemIcon>
         <ListItemText primary="Alumnos" />
       </ListItemButton>
       <ListItemButton onClick={ () => handleClickMaestros()} >
         <ListItemIcon>
-          <DraftsIcon />
+          <Person3Icon/>
         </ListItemIcon>
         <ListItemText primary="Maestros" />
       </ListItemButton>
       <ListItemButton  onClick={ () => handleClickAsistencia()}>
         <ListItemIcon>
-          <InboxIcon />
+          <EmojiPeopleIcon />
         </ListItemIcon>
         <ListItemText primary="Asistencia" />
         {open ? <ExpandLess /> : <ExpandMore />}
@@ -201,28 +210,31 @@ export default function MiniDrawer() {
     </List>
         <Divider />
         <List>
-          {['Reunion', 'Clase', 'Materias'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+        <ListItemButton onClick={ () => handleClickGrupos()} >
+        <ListItemIcon>
+          <Diversity3Icon/>
+        </ListItemIcon>
+        <ListItemText primary="Reunion" />
+      </ListItemButton>
+      <ListItemButton onClick={ () => handleClickGrupos()} >
+        <ListItemIcon>
+          <GroupsIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Asistencia" />
+      </ListItemButton>
+        <ListItemButton onClick={ () => handleClickGrupos()} >
+        <ListItemIcon>
+          <GroupsIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Grupos" />
+      </ListItemButton>
+      <ListItemButton onClick={ () => handleClicklistas()} >
+        <ListItemIcon>
+          <AttachFileIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Carga File" />
+      </ListItemButton>
+      
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

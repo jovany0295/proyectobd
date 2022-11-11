@@ -39,3 +39,7 @@
   .container{
     left: 30px ;
   }
+  .ajustarmodal{
+    position: relative;
+    top:10%;
+  }

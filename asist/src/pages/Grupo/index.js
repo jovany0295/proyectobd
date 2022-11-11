@@ -4,9 +4,9 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Search from '../../components/Search';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-const url="http://127.0.0.1:8000/drey/v1/Grupo/";
-const urlAlumnos="http://127.0.0.1:8000/drey/v1/Alumno/";
-const urlGrupoAlumnos="http://127.0.0.1:8000/drey/v1/Grupo_has_Alumnos/";
+const url="http://127.0.0.1:8000/bd/v1/Grupo/";
+const urlAlumnos="http://127.0.0.1:8000/bd/v1/Alumno/";
+const urlGrupoAlumnos="http://127.0.0.1:8000/bd/v1/Grupo_has_Alumnos/";
 
 class Grupo extends Component {
 state={
@@ -51,6 +51,14 @@ peticionGetAlumnos=()=>{
     console.log(error.message);  
   })
   }
+peticionGetGrupoAlumnos=()=>{
+    axios.get(urlGrupoAlumnos).then(response=>{
+      this.setState({dataGrupoAlumnos: response.data});
+      console.log(response.data)
+    }).catch(error=>{
+      console.log(error.message);   
+    })
+    }
 peticionPost=async()=>{
   delete this.state.form.id;
  await axios.post(url,this.state.form).then(response=>{
@@ -60,18 +68,9 @@ peticionPost=async()=>{
     console.log(error.message);
   })
 }
-peticionGetGrupoAlumnos=()=>{
-  axios.get(urlGrupoAlumnos).then(response=>{
-    this.setState({dataGrupoAlumnos: response.data});
-    console.log(response.data)
-  }).catch(error=>{
-    console.log(error.message);   
-  })
-  }
 peticionPostGrupoAlumnos=async()=>{
   delete this.state.form.id;
  await axios.post(urlGrupoAlumnos,this.state.formGrupoAlumnos).then(response=>{
-   console.log(this.state.formGrupoAlumnos)
     this.modalGrupoAlumnos();
     this.peticionGetGrupoAlumnos();
   }).catch(error=>{
@@ -86,6 +85,7 @@ peticionPut=()=>{
 }
 peticionDelete=()=>{
   axios.delete(url+this.state.form.id).then(response=>{
+   
     this.setState({modalEliminar: false});
     this.peticionGet();
   })
@@ -169,17 +169,24 @@ handleChange3=async e=>{
     const {form}=this.state;
     const {formAlumnos}=this.state;
   return (
-    <> <div className='search'>
-    <Search   placeholder='Buscar Grupo' value= {this.state.result} onChange={this.onChange}/>
-    </div> 
+  <> 
+   <div className='container'>
     <div className="App">
       <h2>Grupos</h2>
-    <br /><br /><br />
-    <button className="btn btn-danger" onClick={()=>{ this.setState({modalGrupoAlumnos: true})}}>Asignar</button>
-  <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Grupo</button>
-  <br /><br />
-    <table className="table" class="table table-striped table-hover">
-      <thead>
+      <br />
+      <div class="mb-3 row">
+        <div class="col-sm-4">
+        <input type="text" class="form-control" placeholder='Buscar Grupo' value= {this.state.result} onChange={this.onChange}/>
+        </div>
+        <div class="col-sm-4">
+        <button className="btn btn-danger" onClick={()=>{ this.setState({modalGrupoAlumnos: true})}}>Asignar</button>
+        </div>
+        <div class="col-sm-4"> 
+        <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Grupo</button>
+        </div>
+     </div>
+     <table className="table" class="table table-striped table-hover">
+     <thead>
         <tr>
           <th>ID</th>
           <th>Nombre</th>
@@ -191,7 +198,7 @@ handleChange3=async e=>{
         .indexOf(this.state.result.toLowerCase()) > -1)
         .map(grupo=>{
           return(
-            <tr>
+          <tr>
           <td>{grupo.id}</td>
           <td>{grupo.nombre}</td>
           <td>
@@ -200,13 +207,13 @@ handleChange3=async e=>{
                 <button className="btn btn-danger" onClick={()=>{this.seleccionarGrupo(grupo); this.setState({modalEliminar: true})}}>Eliminar</button>
                 {"   "}
                 <button className="btn btn-danger" onClick={()=>{this.VerAlumnos(grupo); this.setState({modalAlumnos: true})}}>Alumnos</button>
-                </td>
+          </td>
           </tr>
           )
         })}
       </tbody>
     </table>
-    <Modal isOpen={this.state.modalInsertar}>
+    <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
                 <ModalHeader style={{display: 'block'}}>
                 <h5 class="modal-title" id="exampleModalLongTitle">Grupo</h5>
                   <span style={{float: 'right'}} onClick={()=>this.modalInsertar()}>x</span>
@@ -235,7 +242,7 @@ handleChange3=async e=>{
                     <button className="btn btn-danger" onClick={()=>this.modalInsertar()}>Cancelar</button>
               </ModalFooter>
       </Modal>
-      <Modal isOpen={this.state.modalEliminar}>
+      <Modal className='ajustarmodal' isOpen={this.state.modalEliminar}>
             <ModalBody>
                Estás seguro que deseas eliminar este grupo?{form && form.nombre}
             </ModalBody>
@@ -244,16 +251,16 @@ handleChange3=async e=>{
               <button className="btn btn-secundary" onClick={()=>this.setState({modalEliminar: false})}>No</button>
             </ModalFooter>
           </Modal>
-          <Modal isOpen={this.state.modalEliminarAlumno}>
+          <Modal className='ajustarmodal' isOpen={this.state.modalEliminarAlumno}>
             <ModalBody>
-               Estás seguro que deseas eliminar este alumno del grupo?{formAlumnos && formAlumnos.id}
+               Estás seguro que deseas eliminar este alumno del grupo?{formAlumnos && formAlumnos.nombre}
             </ModalBody>
             <ModalFooter>
               <button className="btn btn-danger" onClick={()=>{this.peticionDeleteAlumnos()}}>Sí</button>
               <button className="btn btn-secundary" onClick={()=>{this.setState({modalEliminarAlumno: false})}}>No</button>
             </ModalFooter>
           </Modal>
-          <Modal   isOpen={this.state.modalGrupoAlumnos} >
+          <Modal  className='ajustarmodal' isOpen={this.state.modalGrupoAlumnos} >
           <ModalHeader style={{display: 'block'}}>
                 <h5 class="modal-title" id="exampleModalLongTitle">Asignar alumno a grupo</h5>
                 <span style={{float: 'right'}} onClick={()=>this.modalGrupoAlumnos()}>x</span>
@@ -284,7 +291,7 @@ handleChange3=async e=>{
           <button className="btn btn-danger" onClick={()=>this.modalGrupoAlumnos()}>Cancelar</button>
           </ModalFooter>
     </Modal>
-    <Modal fullscreen="sm"
+    <Modal className='ajustarmodal' fullscreen="sm"
           size="lg"  isOpen={this.state.modalAlumnos}>
           <ModalHeader style={{display: 'block'}}>
           <h5 class="modal-title" id="exampleModalLongTitle">Alumnos en este grupo</h5>
@@ -300,14 +307,15 @@ handleChange3=async e=>{
                 </tr>
               </thead>
               <tbody>
-                {this.state.dataGrupoAlumnos.filter( p=> formAlumnos.nombre === (p.idGrupo))
-                .map(alumno=>{
+                {this.state.dataGrupoAlumnos.filter( p=> formAlumnos.nombre === (p.grupo))
+                .map(grupoAlumno=>{
                   return(
-                    <tr onChange={this.handleChange3}>
-                  <td>{formAlumnos.nombre}</td>
-                  <td>{alumno.idAlumno}</td>
-                  <td> <button className="btn btn-danger" onClick={()=>{this.seleccionarAlumno(alumno); this.setState({modalEliminarAlumno: true});this.modalAlumnos()}}>Eliminar</button>
-                  </td>
+                  <tr onChange={this.handleChange3}>
+                    <td>{formAlumnos.nombre}</td>
+                    <td>{grupoAlumno.alumno}</td>
+                    <td> <button className="btn btn-danger" onClick={()=>{this.seleccionarAlumno(grupoAlumno); 
+                    this.setState({modalEliminarAlumno: true});this.modalAlumnos()}}>Eliminar</button>
+                    </td>
                   </tr>
                   )
                 })}
@@ -318,6 +326,7 @@ handleChange3=async e=>{
             <button className="btn btn-danger" onClick={()=>this.modalAlumnos()}>OK</button>
         </ModalFooter>
     </Modal>
+  </div>
   </div>
   </>
   );

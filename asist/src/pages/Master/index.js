@@ -100,11 +100,9 @@ console.log(this.state.form);
   return (
     <> 
     <div className='container'>
- 
-    <div className="App">
+     <div className="App">
     <h2>Maestros</h2>
     <br />
-
   <div class="mb-3 row">
     <div class="col-sm-4">
     <input type="text" class="form-control" placeholder='Buscar Docente' value= {this.state.result} onChange={this.onChange}/>
@@ -147,7 +145,7 @@ console.log(this.state.form);
         })}
       </tbody>
     </table>
-    <Modal isOpen={this.state.modalInsertar}>
+    <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
                 <ModalHeader style={{display: 'block'}}>
                   <span style={{float: 'right'}} onClick={()=>this.modalInsertar()}>x</span>
                 </ModalHeader>
@@ -189,7 +187,7 @@ console.log(this.state.form);
           </Modal>
 
 
-          <Modal isOpen={this.state.modalEliminar}>
+          <Modal className='ajustarmodal' isOpen={this.state.modalEliminar}>
             <ModalBody>
                Estás seguro que deseas eliminar {form && form.id}
             </ModalBody>
