@@ -167,11 +167,32 @@ class Alumnos extends Component {
               </tbody>
             </table>
             <div >
-              <Modal className='ajustarmodal' isOpen={this.state.modalInsertar} >
+              <Modal className='ajustarmodal modal-dialog modal-lg'  isOpen={this.state.modalInsertar} >
                 <ModalHeader style={{ display: 'block' }}>
                   <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
                 </ModalHeader>
                 <ModalBody>
+                <form class="row g-3">
+                  <div class="col-auto">
+                    <label for="staticEmail2" class="visually-hidden">Email</label>
+                    <label htmlFor="id">ID</label>
+                    <input className="form-control" type="text" name="id" id="id" readOnly
+                      onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
+                         </div>
+                  <div class="col-auto">
+                  <label htmlFor="nombre">ApellidoP</label>
+
+                    <input className="form-control" type="text" name="apellidoP" id="apellidoP"
+                      onChange={this.handleChange} value={form ? form.apellidoP : ''} />
+                      </div>
+                  <div class="col-auto">
+                  <label htmlFor="nombre">ApellidoM</label>
+                    <input className="form-control" type="text" name="apellidoM" id="apellidoM"
+                      onChange={this.handleChange} value={form ? form.apellidoM : ''} />
+                       </div>
+                </form>
+
+                  
                   <div className="form-group">
                     <label htmlFor="id">ID</label>
                     <input className="form-control" type="text" name="id" id="id" readOnly

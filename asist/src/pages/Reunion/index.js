@@ -11,6 +11,7 @@ class Reunion extends Component {
   state = {
     result: '',
     data: [],
+    dataClase: [],
     modalInsertar: false,
     modalEliminar: false,
     form: {
