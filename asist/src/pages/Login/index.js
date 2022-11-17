@@ -13,11 +13,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Image from '../../fachada/fachada.jpg'; // Import using relative path
-
+import axios from "axios";
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+      {'Copyright � '}
       <Link color="inherit" href="#">
         Alfabuenamaravilla
       </Link>{' '}
@@ -32,12 +32,34 @@ const theme = createTheme();
 export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const datos = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      email: datos.get('email'),
+      password: datos.get('password'),
     });
+
+    const API_URL = `http://localhost:8000/bd/v1/token/`;
+    
+    const user = ({
+      'username' :  datos.get('email'),
+      'password' : datos.get('password')
+    });
+
+    axios.post(API_URL, 
+      user, {
+        headers: {
+            'Content-Type': 'application/json'
+      }})
+    .then(response => { 
+        sessionStorage.setItem('token', response.data.access);
+        window.location.href = '/';
+    })
+    .catch(error => {
+        console.log('Error ' + error.response)
+    });
+
   };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -71,9 +93,9 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Iniciar Sesión
+              Iniciar Sesion
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={hanldeSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -89,7 +111,7 @@ export default function SignInSide() {
                 required
                 fullWidth
                 name="password"
-                label="Contraseña"
+                label="Contrasenia"
                 type="password"
                 id="password"
                 autoComplete="current-password"
