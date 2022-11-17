@@ -30,14 +30,17 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
+  const [error, setError] = React.useState();
   const handleSubmit = (event) => {
     event.preventDefault();
     const datos = new FormData(event.currentTarget);
+   
     console.log({
       email: datos.get('email'),
       password: datos.get('password'),
     });
 
+    
     const API_URL = `http://localhost:8000/bd/v1/token/`;
     
     const user = ({
@@ -55,7 +58,8 @@ export default function SignInSide() {
         window.location.href = '/';
     })
     .catch(error => {
-        console.log('Error ' + error.response)
+        console.log('ERRORR ES ' + error.response)
+        setError("Datos incorrectos, favor de verificar la información");
     });
 
   };
@@ -95,7 +99,7 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Iniciar Sesion
             </Typography>
-            <Box component="form" noValidate onSubmit={hanldeSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -120,6 +124,13 @@ export default function SignInSide() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               /> */}
+
+              {/* <Typography component="h1" variant="h5">
+                 Datos incorrectos Favor de Verificar la Informacion
+              </Typography> */}
+              
+              {error? <span style={{color: "red", display: "flex", justifyContent: "center"}}>{error}</span> : null }
+              
               <Button
                 type="submit"
                 fullWidth
