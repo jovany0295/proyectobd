@@ -10,10 +10,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import FadeLoader from "react-spinners/FadeLoader";
 
-
 function ListInvitations() {
-
-
   //params from the previous page
   const { idPlacementTest } = useParams();
 
@@ -31,7 +28,6 @@ function ListInvitations() {
 
   //open modal to insert or update
   const [openModal, setOpenModal] = useState(false);
-
   //state for updated information
   const [alertVisible, setAlertVisible] = useState(false);
 
