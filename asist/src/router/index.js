@@ -7,6 +7,8 @@ import Clase from '../pages/Clases'
 import Asistencia from '../pages/Asistencia'
 import Login from '../pages/Login'
 import Listas from '../pages/Listas'
+import Graficos from '../pages/Graficos'
+
 
 
 
@@ -22,6 +24,8 @@ const routes = [
   { name: 'Login', path: '/Login', component: Login},
   { name: 'Home', path: '/', component: Home},
   { name: 'Listas', path: '/Listas', component: Listas},
+  { name: 'Graficos', path: '/Graficos', component: Graficos},
+
   // { name: 'UserEdit', path: '/users/:id', component: UserEdit },
 ]
 
