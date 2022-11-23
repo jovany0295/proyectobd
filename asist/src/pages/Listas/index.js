@@ -349,13 +349,13 @@ function ListInvitations() {
           </Table>
         </TableContainer>
 
-        <Stack direction="row" alignItems="right" spacing={3} style={{marginLeft: "40%"}}>
+        <Stack direction="row" alignItems="right" spacing={3} style={{marginLeft: "60%"}}>
 
           <Button 
             startIcon= {<FileUploadIcon />}
             variant="contained"
             component="label"
-            style={{ backgroundColor: "#111827", color: "white", marginTop: "20px", marginBottom: "20px", width: 200 }} >
+            style={{ backgroundColor: "#111827", color: "white", marginTop: "15px", marginBottom: "20px", width: 200 }} >
             Import file
             <input hidden accept=".csv" type="file" onChange={(e) => readFile(e.target.files[0], idPlacementTest)} />
           </Button>
@@ -365,16 +365,11 @@ function ListInvitations() {
           <Button onClick={() => selectInsert()}
             startIcon= {<PersonAddIcon />}
             variant="contained"
-            style={{ backgroundColor: "#111827", color: "white", marginTop: "20px", marginBottom: "20px", width: 220 }} >
+            style={{ backgroundColor: "#111827", color: "white", marginTop: "15px", marginBottom: "20px", width: 220 }} >
             Add new participant
           </Button>
 
-          <Button onClick={() => sendEmail()}
-            startIcon={<SendIcon />  }
-            variant="contained"
-            style={{ backgroundColor: "#111827", color: "white", marginTop: "20px", marginBottom: "20px", width: 200 }} >
-            Send email
-          </Button>
+          
         </Stack>
 
       </Container>
