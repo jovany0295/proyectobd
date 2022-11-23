@@ -28,7 +28,11 @@ onChange = async e =>{
 }
 
 peticionGet=()=>{
-axios.get(url).then(response=>{
+  let token = sessionStorage.getItem("token")
+axios.get(url, {
+  headers: {
+      'Authorization': 'Bearer ' + token
+}}).then(response=>{
   this.setState({data: response.data});
   console.log(response.data);
 
