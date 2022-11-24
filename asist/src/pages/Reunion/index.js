@@ -19,7 +19,7 @@ class Reunion extends Component {
       cantidad_alumnos: '',
       detalle: '',
       idclase: '',
-
+      fecha: '',
     }
   }
   onChange = async e => {
@@ -30,6 +30,8 @@ class Reunion extends Component {
   peticionGet = () => {
     axios.get(url).then(response => {
       this.setState({ data: response.data });
+      console.log(response.data);
+
     }).catch(error => {
       console.log(error.message);
     })
@@ -37,7 +39,6 @@ class Reunion extends Component {
   peticionGetClase = () => {
     axios.get(urlClase).then(response => {
       this.setState({ dataClase: response.data });
-      console.log(response.data);
     }).catch(error => {
       console.log(error.message);
     })
@@ -73,8 +74,8 @@ class Reunion extends Component {
         id: reunion.id,
         cantidad_alumnos: reunion.cantidad_alumnos,
         detalle: reunion.detalle,
-        idclase: reunion.idclase
-
+        idclase: reunion.idclase,
+        fecha:reunion.fecha
       }
     })
   }
@@ -115,21 +116,23 @@ class Reunion extends Component {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>TotalAlumnos</th>
+                  <th>Total Alumnos</th>
                   <th>Clase</th>
-                  <th>NombreReunion</th>
+                  <th>Nombre Reunion</th>
+                  <th>Fecha</th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.data.filter(reunion => reunion.clase.toLowerCase()
+                {this.state.data.filter(reunion => reunion.detalle.toLowerCase()
                   .indexOf(this.state.result.toLowerCase()) > -1)
                   .map(reunion => {
                     return (
                       <tr>
                         <td>{reunion.id}</td>
-                        <td>{reunion.total_alumnos}</td>
-                        <td>{reunion.nombre_reunion}</td>
-                        <td>{reunion.clase}</td>
+                        <td>{reunion.cantidad_alumnos}</td>
+                        <td>{reunion.detalle}</td>
+                        <td>{reunion.idclase}</td>
+                        <td>{reunion.fecha}</td>
 
                         <td>
                           <button className="btn btn-primary" onClick={() => { this.seleccionarReunion(reunion); this.modalInsertar() }}>Actualizar</button>
@@ -149,15 +152,15 @@ class Reunion extends Component {
                 <div className="form-group">
                   <label htmlFor="id">ID</label>
                   <input className="form-control" type="text" name="id" id="id" readOnly
-                    onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
+                    onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} disabled/>
                   <br />
                   <label htmlFor="Cantidad de alumnos">Total</label>
                   <input className="form-control" type="text" name="totalalumno" id="totalalumno"
-                    onChange={this.handleChange} value={form ? form.totalalumno : ''} />
+                    onChange={this.handleChange} value={form ? form.cantidad_alumnos : ''} />
                   <br />
                   <label htmlFor="detalle">Nombre Reunion</label>
                   <input className="form-control" type="text" name="detalle" id="detalle"
-                    onChange={this.handleChange} value={form ? form.nombrereunion : ''} />
+                    onChange={this.handleChange} value={form ? form.detalle : ''} />
                   <br />
                   <label htmlFor="clase">Clase</label>
                   <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"

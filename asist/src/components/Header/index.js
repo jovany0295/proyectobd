@@ -37,6 +37,7 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import SendTimeExtensionIcon from '@mui/icons-material/SendTimeExtension';
 import SendTimeExtension from '@mui/icons-material/SendTimeExtension';
+import BarChartIcon from '@mui/icons-material/BarChart';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -149,6 +150,9 @@ export default function MiniDrawer() {
 const handleClickReunion = () => {
   navigate('/Reunion');
 }
+const handleClickGraficos = () => {
+  navigate('/Graficos');
+}
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -251,6 +255,12 @@ const handleClickReunion = () => {
           <SendTimeExtensionIcon/>
         </ListItemIcon>
         <ListItemText primary="Reunion" />
+      </ListItemButton>
+      <ListItemButton onClick={ () => handleClickGraficos()} >
+        <ListItemIcon>
+          <BarChartIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Graficos" />
       </ListItemButton>
       
         </List>

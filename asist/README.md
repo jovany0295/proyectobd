@@ -1,12 +1,9 @@
 # Integrantes
 Jovany Yair Patiño Rayo
-<<<<<<< HEAD
 <p style='text-align: center;'> Documentación Técnica sistema de asistencia.
 <p style='text-align: right;'> Construcción del Front-End Noviembre 2022.
 <br /> <br /> <br />
-=======
 Xiadani Gutierrez Rendon (emoxa)
->>>>>>> feature/xiada
 
 Tabla de Contenidos
 1. Tecnologías utilizadas	
