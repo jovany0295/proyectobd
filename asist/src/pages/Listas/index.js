@@ -263,8 +263,7 @@ function ListInvitations() {
     return (
       <TableRow>
         <StyledTableCell colSpan={6} align="center" style={{ fontSize: 30, color: '#d1d1d1', backgroundColor: '#fff' }}>
-          This placement test has no recorded results
-        </StyledTableCell>
+Vacio        </StyledTableCell>
       </TableRow>
     );
   }
@@ -350,7 +349,8 @@ function ListInvitations() {
         </TableContainer>
 
         <Stack direction="row" alignItems="right" spacing={3} style={{marginLeft: "60%"}}>
-
+            
+        
           <Button 
             startIcon= {<FileUploadIcon />}
             variant="contained"
