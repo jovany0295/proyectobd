@@ -1,4 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+//import React, { Component } from 'react';
+import * as Yup from "yup";
+import { Formik, Field, FastField, Form, errors, ErrorMessage } from "formik";
+//import { materiaSchema } from '../../validacion/materiavalidacion';
 import './index.css';
 import axios from "axios";
 import Search from '../../components/Search';
@@ -6,6 +11,43 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 const url = "http://127.0.0.1:8000/bd/v1/Materia/";
 
+function validateNombre(value) {
+  let error;
+  if (!value) {
+    error = 'Required';
+  } else if (/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.") {
+    error = 'Invalid nombre solo latinos';
+  }
+  return error;
+}
+function validateDescripcion(value) {
+  let error;
+  if (!value) {
+    error = 'Required descr';
+  } else if (/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.") {
+    error = 'Invalid solo latinos';
+  }
+  return error;
+}
+
+export const materiaSchema = Yup.object().shape({
+    
+  nombre: Yup.string()
+    
+    .required("Campo Requeridoo")
+    .min(3, "Mínimo 5 caracteres")
+    .max(25, "Máximo 25 caracteres")
+    .matches(/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.")
+    .matches(/^\s*[\S]+(\s[\S]+)+\s*$/gms, 'Nombre Completo'),
+    
+  
+  descripcion: Yup.string()
+    .required("Campo Requerido")
+    .matches(/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.")
+    .matches(/^\s*[\S]+(\s[\S]+)+\s*$/gms, 'Nombre Completo'),
+});
+
+ 
 class Materias extends Component {
   state = {
     result: '',
@@ -80,7 +122,32 @@ class Materias extends Component {
   render() {
     const { form } = this.state;
     return (
-      <>
+              <div className="container">
+              <div className="row mb-5">
+                <div className="col-lg-12 text-center">
+                  <h1 className="mt-5">Login Form</h1>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-lg-12">
+            <Formik
+            initialValues={{
+              
+              nombre: '',
+              descripcion: '',
+             
+            }}
+            validationSchema={materiaSchema}
+            onSubmit={values  => {
+              // same shape as initial values
+              console.log(values);
+              
+            }
+            }
+          >
+           {({errors, touched}) => (
+            <Form>  
+      
         <div className='container'>
           <div className="App">
             <h2>Materias</h2>
@@ -93,7 +160,7 @@ class Materias extends Component {
               <div class="col-sm-4">
               </div>
               <div class="col-sm-4">
-                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Materia</button>
+                <button className="btn btn-success" type="submit" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Materia</button>
               </div>
             </div>
             <table className="table" class="table table-striped table-hover">
@@ -124,6 +191,7 @@ class Materias extends Component {
                   })}
               </tbody>
             </table>
+           
             <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
               <ModalHeader style={{ display: 'block' }}>
                 <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
@@ -135,27 +203,37 @@ class Materias extends Component {
                     onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
                   <br />
                   <label htmlFor="nombre">Nombre</label>
-                  <input className="form-control" type="text" name="nombre" id="nombre"
-                    onChange={this.handleChange} value={form ? form.nombre : ''} />
                   <br />
+                  <Field type="text" name="nombre" placeholder="Nombre" id="nombre" validate={this.validateNombre}
+                    onChange={this.handleChange} value={form ? form.nombre : ''}  />
+                    {errors.nombre && touched.nombre && 
+                      <div>{errors.nombre}</div>}
+                    <br />
+                 
+                  
                   <label htmlFor="descripcion">Descripcion</label>
-                  <input className="form-control" type="text" name="descripcion" id="descripcion"
-                    onChange={this.handleChange} value={form ? form.descripcion : ''} />
+                  <Field className="form-control" type="text" name="descripcion" placeholder="Nombre del Docente" id="descripcion" validate={this.validateDescripcion}
+                     value={form ? form.descripcion : ''} onChange={this.handleChange} />
+                    {errors.descripcion && touched.descripcion &&
+                        <div>{errors.descripcion}</div>}
+                    
                   <br />
                 </div>
               </ModalBody>
 
               <ModalFooter>
                 {this.state.tipoModal === 'insertar' ?
-                  <button className="btn btn-success" onClick={() => this.peticionPost()}>
-                    Insertar
-                  </button> : <button className="btn btn-primary" onClick={() => this.peticionPut()}>
-                    Actualizar
+                  <button type="submit" className="btn btn-primary btn-block" onClick={() => this.peticionPost()}>
+                   Insertar
+                  </button> : <button type="submit" className="btn btn-primary btn-block" onClick={() => this.peticionPut()}>
+                  
                   </button>
                 }
                 <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
               </ModalFooter>
             </Modal>
+           
+           
             <Modal isOpen={this.state.modalEliminar}>
               <ModalBody>
                 Estás seguro que deseas eliminar: {form && form.nombre}
@@ -165,10 +243,20 @@ class Materias extends Component {
                 <button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>No</button>
               </ModalFooter>
             </Modal>
+            
           </div>
         </div>
-      </>
+       
+        
+      </Form>
+        )}
+       </Formik>
+       </div>
+        </div>
+      </div>
     );
   }
 }
 export default Materias;
+const rootElement = document.getElementById("root");
+ReactDOM.render(<Materias/>, rootElement);
