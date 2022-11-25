@@ -29,7 +29,7 @@ class Alumnos extends Component {
   }
   onChange = async e => {
     e.persist();
-    await this.setState({ result: e.target.value });
+    await this.setState({ result: e.target.value});
     console.log(this.state.result);
   }
 
@@ -101,6 +101,7 @@ class Alumnos extends Component {
     e.persist();
     await this.setState({
       form: {
+        id_carrera:1,
         ...this.state.form,
         [e.target.name]: e.target.value
       }
@@ -242,9 +243,9 @@ class Alumnos extends Component {
                   <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
                 </ModalFooter>
               </Modal>
-              <Modal isOpen={this.state.modalEliminar}>
+              <Modal className='ajustarmodal' isOpen={this.state.modalEliminar}>
                 <ModalBody>
-                  Estás seguro que deseas eliminar al alumno{form && form.nombre}
+                  Estás seguro que deseas eliminar al alumno: {form && form.nombre}
                 </ModalBody>
                 <ModalFooter>
                   <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>

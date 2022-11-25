@@ -1,18 +1,22 @@
 
 import React, { memo, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Container, styled, Button, Alert, AlertTitle, Snackbar, Stack,  Checkbox,
-  Table, TableBody, TableContainer, TableFooter, TableHead, TableRow, TablePagination, Paper } from "@mui/material";
+import {
+  Container, styled, Button, Alert, AlertTitle, Snackbar, Stack, Checkbox,
+  Table, TableBody, TableContainer, TableFooter, TableHead, TableRow, TablePagination, Paper
+} from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import OpenFile from './ReadCSV';
 import SendIcon from '@mui/icons-material/Send';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import FadeLoader from "react-spinners/FadeLoader";
+import axios from "axios";
 
 function ListInvitations() {
   //params from the previous page
   const { idPlacementTest } = useParams();
+  const url = "http://127.0.0.1:8000/bd/v1/Alumno/";
 
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
@@ -56,8 +60,7 @@ function ListInvitations() {
 
   // //if ocurred an insert, update, delete => show an alert
   useEffect(() => {
-    if (alertVisible === true) 
-    {
+    if (alertVisible === true) {
       setTimeout(() => { setAlertVisible(false); }, 3000);
 
       //return data updated
@@ -70,19 +73,18 @@ function ListInvitations() {
 
   //return list from csv
   const getData = async () => {
-    try 
-    {
-      listParticipants.forEach(function(e, index){
-        if (typeof e === "object" ){
+    try {
+      listParticipants.forEach(function (e, index) {
+        if (typeof e === "object") {
           e["index"] = index
         }
       });
-    
+
       setListParticipants(listParticipants);
       setLoading(false);
     }
-    catch(ex) {
-      setShowError({open: true, message : ex})
+    catch (ex) {
+      setShowError({ open: true, message: ex })
     }
   }
 
@@ -103,62 +105,42 @@ function ListInvitations() {
     setOpenModal(true);
     setAlertVisible(false);
   }
+  const insertar = () => {
+    for (let i = 0; i < 3; i++) {
+      console.log(selected[i])
+      axios.post(url, selected[i]).then(response => {
+      }).catch(error => {
+        console.log(error.message);
+      })
+    }
+  }
 
   const closeSnack = () => {
     setShowError({ open: false, message: "" });
   };
 
+
   const readFile = (file, idPlacementTest) => {
-    
+
     const reader = new FileReader();
-    
+
     reader.onload = function (e) {
       const text = e.target.result;
 
-      if (OpenFile.readCSV(text.replace(/\r/g, ''), 5) !== null) {
+      if (OpenFile.readCSV(text.replace(/\r/g, ''), 7) !== null) {
 
-        const listTemp = OpenFile.readCSV(text.replace(/\r/g, ''), 5);
-        
-        listTemp.forEach(function(e, index){
-          if (typeof e === "object" ){
-          
-            e["index"] = index
-          }
-        });
+        const listTemp = OpenFile.readCSV(text.replace(/\r/g, ''), 7);
 
         setListParticipants(listTemp);
       } else {
-        
+
       }
     };
 
     reader.readAsText(file, 'ISO-8859-1'); // enable accents
   };
 
-  const sendEmail = () => {
-    const mailObject = {
-      toAdresses : getEmail(),
-      html :  "<p> La liga de correo es: " + idPlacementTest + "</p>",
-      text : "Saludos",
-      subject : "Subject"
-    }
 
-    console.log("------ mailObject ------")
-    console.log(mailObject)
-
-    console.log("\n------ list ------")
-    console.log(selected)
-  }
-
-  const getEmail = () =>{
-    let emails = [];
-
-    selected.map((item,index) =>{
-      emails.push(item.email)
-    })
-
-    return emails;
-  }
 
   // --- checkBox
   const handleSelectAllClick = (event) => {
@@ -169,7 +151,7 @@ function ListInvitations() {
     }
     else
       setSelected([]);
-  };  
+  };
 
 
   function ShowAlert() {
@@ -190,23 +172,19 @@ function ListInvitations() {
 
   function PrintRows(props) {
 
-    const {item, i, setOpenModal,  setSelectedIndex, selected, setSelected, isSelected } = props;
+    const { item, i, setOpenModal, setSelectedIndex, selected, setSelected, isSelected } = props;
 
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
       "&:nth-of-type(odd)": {
         backgroundColor: theme.palette.action.hover,
       },
     }));
-  
-    const selectEdition = (index) => {
-      setSelectedIndex(index);
-      setOpenModal(true);
-    }
-  
+
+
     const handleCheckBox = (event, item) => {
       const selectedIndex = selected.indexOf(item);
       let newSelected = [];
-  
+
       if (selectedIndex === -1) {
         newSelected = newSelected.concat(selected, item);
       } else if (selectedIndex === 0) {
@@ -221,38 +199,44 @@ function ListInvitations() {
       }
 
       setSelected(newSelected);
+
     };
 
-    const isItemSelected = isSelected(item);
+    const isItemSelected = isSelected(item)
 
+    item.semestre = parseInt(item.semestre, 10)
+    item.id_carrera = parseInt(item.id_carrera, 10)
     return (
       <React.Fragment key={item.index}>
-  
+
         <StyledTableRow hover
           onClick={(event) => handleCheckBox(event, item)}
           role="checkbox"
           aria-checked={isItemSelected}
           tabIndex={-1}
-          key={item}
+
           selected={isItemSelected}
         >
 
-          <TableCell padding="checkbox" component="th" scope="row" align="right" width="5%">     
+          <TableCell padding="checkbox" component="th" scope="row" align="right" width="5%">
             <Checkbox
               color="primary"
               checked={isItemSelected}
               inputProps={{
-              "aria-labelledby": i
+                "aria-labelledby": i
               }}
             />
           </TableCell>
-          
+
           <TableCell component="th" scope="row" align="right" width="5%"> {i + 1} </TableCell>
-          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.nombre} </TableCell>
+          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.nombre} </TableCell>
+          <TableCell component="th" align="center" width="10%" style={{ textAlign: "center" }}> {item.apellidoP} </TableCell>
+          <TableCell component="th" align="center" width="10%" style={{ textAlign: "center" }}> {item.apellidoM} </TableCell>
           <TableCell component="th" align="center" width="10%" style={{ textAlign: "center" }}> {item.semestre} </TableCell>
-          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.curp} </TableCell>
-          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.carrera} </TableCell>
+          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.CURP} </TableCell>
           <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.correo} </TableCell>
+          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.id_carrera} </TableCell>
+
         </StyledTableRow>
       </React.Fragment>
     );
@@ -263,7 +247,7 @@ function ListInvitations() {
     return (
       <TableRow>
         <StyledTableCell colSpan={6} align="center" style={{ fontSize: 30, color: '#d1d1d1', backgroundColor: '#fff' }}>
-Vacio        </StyledTableCell>
+          Vacio        </StyledTableCell>
       </TableRow>
     );
   }
@@ -317,20 +301,23 @@ Vacio        </StyledTableCell>
                   />
                 </StyledTableCell>
                 <StyledTableCell width="5%" align="left"> ID </StyledTableCell>
-                <StyledTableCell align="right" width="20%" style={{ textAlign: "center" }}> Full Name </StyledTableCell>
+                <StyledTableCell align="right" width="10%" style={{ textAlign: "center" }}> Full Name </StyledTableCell>
+                <StyledTableCell align="right" width="10%" style={{ textAlign: "center" }}> ApellidoP </StyledTableCell>
+                <StyledTableCell align="right" width="10%" style={{ textAlign: "center" }}> ApellidoM </StyledTableCell>
                 <StyledTableCell align="right" width="5%" style={{ textAlign: "center" }}> semestre </StyledTableCell>
                 <StyledTableCell align="right" width="20%" style={{ textAlign: "center" }}> CURP </StyledTableCell>
-                <StyledTableCell align="right" width="15%" > Carrera </StyledTableCell>
                 <StyledTableCell align="right" width="30%" > correo </StyledTableCell>
+                <StyledTableCell align="right" width="30%" > id_carrera </StyledTableCell>
+
               </TableRow>
             </TableHead>
 
             <TableBody>
               {(rowsPerPage > 0 ? listParticipants.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : listParticipants).map((item, i) => (
-                <PrintRows  key={i} {...{ item, i, setOpenModal,  setSelectedIndex, selected, setSelected, isSelected }} />
+                <PrintRows key={i} {...{ item, i, setOpenModal, setSelectedIndex, selected, setSelected, isSelected }} />
               ))}
 
-              { listParticipants.length === 0 ? <EmptyRow/> : null  }
+              {listParticipants.length === 0 ? <EmptyRow /> : null}
             </TableBody>
 
             <TableFooter>
@@ -348,11 +335,11 @@ Vacio        </StyledTableCell>
           </Table>
         </TableContainer>
 
-        <Stack direction="row" alignItems="right" spacing={3} style={{marginLeft: "60%"}}>
-            
-        
-          <Button 
-            startIcon= {<FileUploadIcon />}
+        <Stack direction="row" alignItems="right" spacing={3} style={{ marginLeft: "60%" }}>
+
+
+          <Button
+            startIcon={<FileUploadIcon />}
             variant="contained"
             component="label"
             style={{ backgroundColor: "#111827", color: "white", marginTop: "15px", marginBottom: "20px", width: 200 }} >
@@ -362,14 +349,14 @@ Vacio        </StyledTableCell>
 
 
 
-          <Button onClick={() => selectInsert()}
-            startIcon= {<PersonAddIcon />}
+          <Button onClick={() => insertar()}
+            startIcon={<PersonAddIcon />}
             variant="contained"
             style={{ backgroundColor: "#111827", color: "white", marginTop: "15px", marginBottom: "20px", width: 220 }} >
-            Add new participant
+            Insertar
           </Button>
 
-          
+
         </Stack>
 
       </Container>
