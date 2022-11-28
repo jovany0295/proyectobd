@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-
+import Modal from './modalgraficas';
+import axios from "axios";
 
 import {
   Chart as ChartJS,
@@ -15,10 +16,7 @@ import {
   Legend,
 } from "chart.js";
 
-import { Bar } from "react-chartjs-2";
-import { Pie } from "react-chartjs-2";
-import { Line } from "react-chartjs-2";
-
+import { Bar, Pie, Line } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -33,7 +31,19 @@ ChartJS.register(
 );
 
 
+const url = "http://127.0.0.1:8000/bd/v1/Asistencia/";
+var datostem = [30, 25, 23, 27, 24];
+var etiquetastem = ['Luenes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
+
 const App = () => {
+
+  const peticionGet = () => {
+    axios.get(url).then(response => {
+      setvalue2({ datos2: response.data });
+    }).catch(error => {
+      console.log(error.message);
+    })
+  }
 
   const [tipografico, setTipografico] = useState("Grafica de Barras");
   const cambiarGrafico = async e => setTipografico(e.target.value);
@@ -59,6 +69,56 @@ const App = () => {
       )
     }
   }
+
+  const [tipofiltro, setTipofiltro] = useState("Por grupo");
+  const cambiarFiltro = async e => {
+    datostem = [];
+    etiquetastem = [];
+
+    for (var i = 0; i < value2.datos2.length; i++) {
+      datostem.push(value2.datos2[i].diferencia);
+      etiquetastem.push(value2.datos2[i].fecha);
+    }
+
+    console.log(datostem);
+
+    console.log(etiquetastem);
+    setTipofiltro(e.target.value);
+  }
+
+  const filtro = () => {
+
+    if (tipofiltro == "Por alumno") {
+      return (
+        <>
+          <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="idAlumno" id="idAlumno"
+          >
+            {value2.datos2.map(asistencia => (
+              <option key={asistencia.idAlumno} value={asistencia.idAlumno}>{asistencia.idAlumno}</option>
+
+            ))
+            }
+          </select>
+        </>
+      )
+
+    }
+
+    if (tipofiltro == "Por grupo") {
+      return (
+        <>
+          <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="idReunion" id="idReunion"
+          >
+            {value2.datos2.map(reunion => (
+              <option key={reunion.idReunion} value={reunion.idReunion}>{reunion.idReunion}</option>))
+            }
+
+          </select>
+        </>
+      )
+    }
+  }
+
 
   const initialState = { datos: [30, 25, 23, 27, 24], etiquetas: ['Luenes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'], titulog: "Por semana" };
   const [value, setvalue] = useState(initialState);
@@ -92,40 +152,36 @@ const App = () => {
   }
 
   const data = {
-    labels: value.etiquetas,
+    labels: etiquetastem,
     datasets: [{
-      label: value.titulog,
+      label: 'registro',
       backgroundColor: 'rgba(53, 162, 235, 0.4)',
       borderColor: "rgb(53, 162, 235)",
       borderWidth: 1,
       hoverBackgroundColor: 'rgba(0,255,0,0.2)',
       hoverBorderColor: "#FF0000",
-      data: value.datos
+      data: datostem
     }]
   };
 
-  const data2 = {
-    labels: value.etiquetas,
-    datasets: [{
-      label: value.titulog,
-      backgroundColor: 'rgba(53, 162, 235, 0.4)',
-      borderColor: "rgb(53, 162, 235)",
-      borderWidth: 1,
-      hoverBackgroundColor: 'rgba(0,255,0,0.2)',
-      hoverBorderColor: "#FF0000",
-      data: value.datos
-    }]
-  };
+
+  const initialState2 = { datos2: [], datos3: [] };
+  const [value2, setvalue2] = useState(initialState2);
 
   const opciones = {
     maintainAspectRatio: false,
     responsive: true
   }
 
-  const optipo = [
+  const optipog = [
     { value: 'Grafica de Barras', label: 'Grafico de Barras' },
     { value: 'Grafica de Puntos', label: 'Grafica de Puntos' },
     { value: 'Grafica de Pastel', label: 'Grafica de Pastel' }
+  ]
+
+  const optipof = [
+    { value: 'Por grupo', label: 'Por grupo' },
+    { value: 'Por alumno', label: 'Por alumno' },
   ]
 
   const opperidos = [
@@ -133,6 +189,8 @@ const App = () => {
     { value: 'Por mes', label: 'Por mes' },
     { value: 'Por año', label: 'Por año' }
   ]
+
+  { peticionGet() }
 
   return (
 
@@ -150,10 +208,23 @@ const App = () => {
           <select class="form-select form-select-lg mb-3 seleccion"
             aria-label=".form-select-lg example"
             onChange={cambiarGrafico}>
-            {optipo.map(tipo => (
+            {optipog.map(tipo => (
               <option key={tipo.value} value={tipo.value} >{tipo.value}</option>))
             }
           </select>
+
+          <select class="form-select form-select-lg mb-3 seleccion"
+            aria-label=".form-select-lg example"
+            onChange={cambiarFiltro}
+          >
+            {optipof.map(tipo => (
+              <option key={tipo.value} value={tipo.value} >{tipo.value}</option>))
+            }
+          </select>
+
+
+          {filtro()}
+
 
           <select class="form-select form-select-lg mb-3 seleccion"
             aria-label=".form-select-lg example"
@@ -167,6 +238,7 @@ const App = () => {
         <div class='col-8' className='contenedorgrafico'>
 
           {Grafica()}
+
 
         </div>
 

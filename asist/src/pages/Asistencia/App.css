@@ -36,7 +36,10 @@
       transform: rotate(360deg);
     }
   }
-  .search{
-    display: flex;
-    justify-content: flex-start;
+  .container{
+    left: 30px ;
+  }
+  .ajustarmodal{
+    position: relative;
+    top:10%;
   }
