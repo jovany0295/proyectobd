@@ -7,30 +7,13 @@ import { Formik, Field, FastField, Form, errors, ErrorMessage } from "formik";
 import './index.css';
 import axios from "axios";
 import Search from '../../components/Search';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, ModalHeader, Badge } from 'reactstrap';
 
 const url = "http://127.0.0.1:8000/bd/v1/Materia/";
 
-function validateNombre(value) {
-  let error;
-  if (!value) {
-    error = 'Required';
-  } else if (/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.") {
-    error = 'Invalid nombre solo latinos';
-  }
-  return error;
-}
-function validateDescripcion(value) {
-  let error;
-  if (!value) {
-    error = 'Required descr';
-  } else if (/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.") {
-    error = 'Invalid solo latinos';
-  }
-  return error;
-}
 
-export const materiaSchema = Yup.object().shape({
+
+const materiaSchema = Yup.object().shape({
     
   nombre: Yup.string()
     
@@ -125,31 +108,34 @@ class Materias extends Component {
               <div className="container">
               <div className="row mb-5">
                 <div className="col-lg-12 text-center">
-                  <h1 className="mt-5">Login Form</h1>
+                  <h1 className="mt-5">Materias</h1>
                 </div>
               </div>
               <div className="row">
                 <div className="col-lg-12">
-            <Formik
+      <Formik
             initialValues={{
               
-              nombre: '',
-              descripcion: '',
+              nombre: "",
+              descripcion: "",
              
             }}
             validationSchema={materiaSchema}
-            onSubmit={values  => {
+            onSubmit={({setSubmitting, values }) => {
+              alert("Form is validated! Submitting the form...", values);
+              
+              setSubmitting(false);
               // same shape as initial values
-              console.log(values);
+              //console.log(values);
               
             }
             }
           >
-           {({errors, touched}) => (
-            <Form>  
+           {({touched, errors, isSubmitting, handleChange}) => (
+      <Form>  
       
-        <div className='container'>
-          <div className="App">
+       
+          
             <h2>Materias</h2>
             <br />
 
@@ -191,47 +177,61 @@ class Materias extends Component {
                   })}
               </tbody>
             </table>
-           
+            
             <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
               <ModalHeader style={{ display: 'block' }}>
                 <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
               </ModalHeader>
               <ModalBody>
+                
                 <div className="form-group">
                   <label htmlFor="id">ID</label>
                   <input className="form-control" type="text" name="id" id="id" readOnly
                     onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
                   <br />
+                </div>
+                <div className="form-group">
                   <label htmlFor="nombre">Nombre</label>
                   <br />
-                  <Field type="text" name="nombre" placeholder="Nombre" id="nombre" validate={this.validateNombre}
-                    onChange={this.handleChange} value={form ? form.nombre : ''}  />
-                    {errors.nombre && touched.nombre && 
-                      <div>{errors.nombre}</div>}
-                    <br />
-                 
-                  
-                  <label htmlFor="descripcion">Descripcion</label>
-                  <Field className="form-control" type="text" name="descripcion" placeholder="Nombre del Docente" id="descripcion" validate={this.validateDescripcion}
-                     value={form ? form.descripcion : ''} onChange={this.handleChange} />
-                    {errors.descripcion && touched.descripcion &&
-                        <div>{errors.descripcion}</div>}
-                    
+                    <Field type="text" name="nombre" placeholder="Nombre" id="nombre"  onChange={this.handleChange} value={form ? form.nombre : ''}
+                    className={`form-control ${
+                      touched.nombre && errors.nombre ? "is-invalid" : ""
+                    }`}/>
+                    <ErrorMessage
+                      component="div"
+                      name="nombre"
+                      className="invalid-feedback"
+                    />
+                  </div>
                   <br />
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="descripcion">Descripcion</label>
+                    <Field type="text" name="descripcion" placeholder="Nombre del Docente"   onChange={this.handleChange} 
+                      value={form ? form.descripcion : ''} className={`form-control ${
+                        touched.descripcion && errors.descripcion ? "is-invalid" : ""
+                      }`}/>
+                    <ErrorMessage
+                        component="div"
+                        name="descripcion"
+                        className="invalid-feedback"
+                    />
+                  </div>
+                  <br />
+               
               </ModalBody>
 
               <ModalFooter>
                 {this.state.tipoModal === 'insertar' ?
-                  <button type="submit" className="btn btn-primary btn-block" onClick={() => this.peticionPost()}>
-                   Insertar
-                  </button> : <button type="submit" className="btn btn-primary btn-block" onClick={() => this.peticionPut()}>
-                  
+                  <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>
+                   {isSubmitting ? "Espera.. " : "Insertar"}
+                  </button> : 
+                  <button type="submit" className="btn btn-primary btn-block"  disabled={isSubmitting}>
+                  {isSubmitting ? "Espera.. " :  "Actualizar"} 
                   </button>
                 }
-                <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
               </ModalFooter>
             </Modal>
+            
            
            
             <Modal isOpen={this.state.modalEliminar}>
@@ -243,16 +243,11 @@ class Materias extends Component {
                 <button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>No</button>
               </ModalFooter>
             </Modal>
-            
-          </div>
-        </div>
-       
-        
-      </Form>
+        </Form>
         )}
        </Formik>
        </div>
-        </div>
+      </div>
       </div>
     );
   }
