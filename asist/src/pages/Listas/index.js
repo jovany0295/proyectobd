@@ -16,7 +16,7 @@ import axios from "axios";
 function ListInvitations() {
   //params from the previous page
   const { idPlacementTest } = useParams();
-  const url = "http://127.0.0.1:8000/bd/v1/Alumno/";
+  const urlAlumno = "http://127.0.0.1:8000/bd/v1/Alumno/";
 
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
@@ -106,13 +106,19 @@ function ListInvitations() {
     setAlertVisible(false);
   }
   const insertar = () => {
-    for (let i = 0; i < 3; i++) {
-      console.log(selected[i])
-      axios.post(url, selected[i]).then(response => {
-      }).catch(error => {
-        console.log(error.message);
-      })
-    }
+    let axiosArray = []
+    for (let i = 0; i < selected.length; i++) {
+      let newPromise = axios.post(urlAlumno,selected[i])
+      axiosArray.push(newPromise)
+      console.log(axiosArray)
+    }      
+    axios
+      .all(axiosArray)
+      .then(axios.spread((...responses) => {
+        responses.forEach(res => console.log('Success'))
+        console.log('submitted all axios calls');
+      }))
+      .catch(error => { })
   }
 
   const closeSnack = () => {
