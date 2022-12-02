@@ -3,6 +3,7 @@ import './index.css';
 import axios from "axios";
 import Search from '../../components/Search';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import ValidacionReunion from '../../Validacion/Reunion/Reunion';
 
 const url = "http://127.0.0.1:8000/bd/v1/Reunion/";
 const urlClase = "http://127.0.0.1:8000/bd/v1/Clase/";
@@ -75,7 +76,7 @@ class Reunion extends Component {
         cantidad_alumnos: reunion.cantidad_alumnos,
         detalle: reunion.detalle,
         idclase: reunion.idclase,
-        fecha:reunion.fecha
+       // fecha:reunion.fecha
       }
     })
   }
@@ -149,46 +150,14 @@ class Reunion extends Component {
                 <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
               </ModalHeader>
               <ModalBody>
-                <div className="form-group">
-                  <label htmlFor="id">ID</label>
-                  <input className="form-control" type="text" name="id" id="id" readOnly
-                    onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} disabled/>
-                  <br />
-                  <label htmlFor="Cantidad de alumnos">Total</label>
-                  <input className="form-control" type="text" name="totalalumno" id="totalalumno"
-                    onChange={this.handleChange} value={form ? form.cantidad_alumnos : ''} />
-                  <br />
-                  <label htmlFor="detalle">Nombre Reunion</label>
-                  <input className="form-control" type="text" name="detalle" id="detalle"
-                    onChange={this.handleChange} value={form ? form.detalle : ''} />
-                  <br />
-                  <label htmlFor="clase">Clase</label>
-                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                    name="idclase" id="idclase" onChange={this.handleChange}>
-                    {
-                    this.state.dataClase.map(clase => (
-                    <option key={clase.id} value={clase.id}>{clase.nombre}</option>))
-                    }
-                  </select>
-                  <br />
-
-                </div>
+               <ValidacionReunion/> 
               </ModalBody>
 
-              <ModalFooter>
-                {this.state.tipoModal === 'insertar' ?
-                  <button className="btn btn-success" onClick={() => this.peticionPost()}>
-                    Insertar
-                  </button> : <button className="btn btn-primary" onClick={() => this.peticionPut()}>
-                    Actualizar
-                  </button>
-                }
-                <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
-              </ModalFooter>
+              
             </Modal>
             <Modal isOpen={this.state.modalEliminar}>
               <ModalBody>
-                Estás seguro que deseas eliminar: {form && form.nombrereunion}
+                Estás seguro que deseas eliminar: {form && form.id}
               </ModalBody>
               <ModalFooter>
                 <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>

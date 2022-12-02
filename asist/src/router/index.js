@@ -14,6 +14,7 @@ import Graficos from '../pages/Graficos'
 
 
 
+
 // import UserEdit from '../pages/Users/edit'
 
 const routes = [
@@ -29,6 +30,8 @@ const routes = [
   { name: 'Periodos', path: 'Periodos', component: Periodos },
   { name: 'Reunion', path: 'Reunion', component: Reunion},
   { name: 'Graficos', path: '/Graficos', component: Graficos},
+  
+
 
   // { name: 'UserEdit', path: '/users/:id', component: UserEdit },
 ]

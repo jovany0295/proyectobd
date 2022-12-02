@@ -1,12 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+//import React, { Component } from 'react';
+import * as Yup from "yup";
+import { Formik, Field, FastField, Form, errors, ErrorMessage } from "formik";
+//import { materiaSchema } from '../../validacion/materiavalidacion';
+import ValidacionMaterias from '../../Validacion/Materias/Materias'
 import './index.css';
 import axios from "axios";
 import Search from '../../components/Search';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, ModalHeader, Badge } from 'reactstrap';
 
 const url = "http://127.0.0.1:8000/bd/v1/Materia/";
 
-class Materias extends Component {
+
+
+
+
+ 
+class Materias2 extends Component {
   state = {
     result: '',
     data: [],
@@ -77,12 +88,19 @@ class Materias extends Component {
   componentDidMount() {
     this.peticionGet();
   }
+
   render() {
     const { form } = this.state;
     return (
-      <>
-        <div className='container'>
-          <div className="App">
+              <div className="container">
+              <div className="row mb-5">
+                <div className="col-lg-12 text-center">
+                  <h1 className="mt-5">Materias</h1>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-lg-12">
+     
             <h2>Materias</h2>
             <br />
 
@@ -93,7 +111,7 @@ class Materias extends Component {
               <div class="col-sm-4">
               </div>
               <div class="col-sm-4">
-                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Materia</button>
+                <button className="btn btn-success" type="submit" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Materia</button>
               </div>
             </div>
             <table className="table" class="table table-striped table-hover">
@@ -124,51 +142,32 @@ class Materias extends Component {
                   })}
               </tbody>
             </table>
-            <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
-              <ModalHeader style={{ display: 'block' }}>
-                <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
-              </ModalHeader>
-              <ModalBody>
-                <div className="form-group">
-                  <label htmlFor="id">ID</label>
-                  <input className="form-control" type="text" name="id" id="id" readOnly
-                    onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
-                  <br />
-                  <label htmlFor="nombre">Nombre</label>
-                  <input className="form-control" type="text" name="nombre" id="nombre"
-                    onChange={this.handleChange} value={form ? form.nombre : ''} />
-                  <br />
-                  <label htmlFor="descripcion">Descripcion</label>
-                  <input className="form-control" type="text" name="descripcion" id="descripcion"
-                    onChange={this.handleChange} value={form ? form.descripcion : ''} />
-                  <br />
-                </div>
-              </ModalBody>
+            <div >
+              <Modal className='ajustarmodal' isOpen={this.state.modalInsertar} >
+                <ModalHeader style={{ display: 'block' }}>
+                  <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
+                </ModalHeader>
+                <ModalBody>
+                  <ValidacionMaterias/>
+                </ModalBody>
 
-              <ModalFooter>
-                {this.state.tipoModal === 'insertar' ?
-                  <button className="btn btn-success" onClick={() => this.peticionPost()}>
-                    Insertar
-                  </button> : <button className="btn btn-primary" onClick={() => this.peticionPut()}>
-                    Actualizar
-                  </button>
-                }
-                <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
-              </ModalFooter>
-            </Modal>
-            <Modal isOpen={this.state.modalEliminar}>
-              <ModalBody>
-                Estás seguro que deseas eliminar: {form && form.nombre}
-              </ModalBody>
-              <ModalFooter>
-                <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>
-                <button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>No</button>
-              </ModalFooter>
-            </Modal>
-          </div>
-        </div>
-      </>
+              </Modal>
+              <Modal className='ajustarmodal' isOpen={this.state.modalEliminar}>
+                <ModalBody>
+                  Estás seguro que deseas eliminar la materia{form && form.nombre}
+                </ModalBody>
+                <ModalFooter>
+                  <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>
+                  <button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>No</button>
+                </ModalFooter>
+              </Modal>
+            </div>
+
+       </div>
+      </div>
+      </div>
     );
   }
 }
-export default Materias;
+export default Materias2;
+
