@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import * as Yup from "yup";
 import { Formik, Field, FastField, Form, errors, ErrorMessage } from "formik";
 //import { materiaSchema } from '../../validacion/materiavalidacion';
+import ValidacionMaterias from '../../Validacion/Materias/Materias'
 import './index.css';
 import axios from "axios";
 import Search from '../../components/Search';
@@ -13,25 +14,10 @@ const url = "http://127.0.0.1:8000/bd/v1/Materia/";
 
 
 
-const materiaSchema = Yup.object().shape({
-    
-  nombre: Yup.string()
-    
-    .required("Campo Requeridoo")
-    .min(3, "Mínimo 5 caracteres")
-    .max(25, "Máximo 25 caracteres")
-    .matches(/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.")
-    .matches(/^\s*[\S]+(\s[\S]+)+\s*$/gms, 'Nombre Completo'),
-    
-  
-  descripcion: Yup.string()
-    .required("Campo Requerido")
-    .matches(/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.")
-    .matches(/^\s*[\S]+(\s[\S]+)+\s*$/gms, 'Nombre Completo'),
-});
+
 
  
-class Materias extends Component {
+class Materias2 extends Component {
   state = {
     result: '',
     data: [],
@@ -102,6 +88,7 @@ class Materias extends Component {
   componentDidMount() {
     this.peticionGet();
   }
+
   render() {
     const { form } = this.state;
     return (
@@ -113,29 +100,7 @@ class Materias extends Component {
               </div>
               <div className="row">
                 <div className="col-lg-12">
-      <Formik
-            initialValues={{
-              
-              nombre: "",
-              descripcion: "",
-             
-            }}
-            validationSchema={materiaSchema}
-            onSubmit={({setSubmitting, values }) => {
-              alert("Form is validated! Submitting the form...", values);
-              
-              setSubmitting(false);
-              // same shape as initial values
-              //console.log(values);
-              
-            }
-            }
-          >
-           {({touched, errors, isSubmitting, handleChange}) => (
-      <Form>  
-      
-       
-          
+     
             <h2>Materias</h2>
             <br />
 
@@ -177,81 +142,32 @@ class Materias extends Component {
                   })}
               </tbody>
             </table>
-            
-            <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
-              <ModalHeader style={{ display: 'block' }}>
-                <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
-              </ModalHeader>
-              <ModalBody>
-                
-                <div className="form-group">
-                  <label htmlFor="id">ID</label>
-                  <input className="form-control" type="text" name="id" id="id" readOnly
-                    onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
-                  <br />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="nombre">Nombre</label>
-                  <br />
-                    <Field type="text" name="nombre" placeholder="Nombre" id="nombre"  onChange={this.handleChange} value={form ? form.nombre : ''}
-                    className={`form-control ${
-                      touched.nombre && errors.nombre ? "is-invalid" : ""
-                    }`}/>
-                    <ErrorMessage
-                      component="div"
-                      name="nombre"
-                      className="invalid-feedback"
-                    />
-                  </div>
-                  <br />
-                  <div className="form-group">
-                    <label htmlFor="descripcion">Descripcion</label>
-                    <Field type="text" name="descripcion" placeholder="Nombre del Docente"   onChange={this.handleChange} 
-                      value={form ? form.descripcion : ''} className={`form-control ${
-                        touched.descripcion && errors.descripcion ? "is-invalid" : ""
-                      }`}/>
-                    <ErrorMessage
-                        component="div"
-                        name="descripcion"
-                        className="invalid-feedback"
-                    />
-                  </div>
-                  <br />
-               
-              </ModalBody>
+            <div >
+              <Modal className='ajustarmodal' isOpen={this.state.modalInsertar} >
+                <ModalHeader style={{ display: 'block' }}>
+                  <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
+                </ModalHeader>
+                <ModalBody>
+                  <ValidacionMaterias/>
+                </ModalBody>
 
-              <ModalFooter>
-                {this.state.tipoModal === 'insertar' ?
-                  <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>
-                   {isSubmitting ? "Espera.. " : "Insertar"}
-                  </button> : 
-                  <button type="submit" className="btn btn-primary btn-block"  disabled={isSubmitting}>
-                  {isSubmitting ? "Espera.. " :  "Actualizar"} 
-                  </button>
-                }
-              </ModalFooter>
-            </Modal>
-            
-           
-           
-            <Modal isOpen={this.state.modalEliminar}>
-              <ModalBody>
-                Estás seguro que deseas eliminar: {form && form.nombre}
-              </ModalBody>
-              <ModalFooter>
-                <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>
-                <button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>No</button>
-              </ModalFooter>
-            </Modal>
-        </Form>
-        )}
-       </Formik>
+              </Modal>
+              <Modal className='ajustarmodal' isOpen={this.state.modalEliminar}>
+                <ModalBody>
+                  Estás seguro que deseas eliminar la materia{form && form.nombre}
+                </ModalBody>
+                <ModalFooter>
+                  <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>
+                  <button className="btn btn-secundary" onClick={() => this.setState({ modalEliminar: false })}>No</button>
+                </ModalFooter>
+              </Modal>
+            </div>
+
        </div>
       </div>
       </div>
     );
   }
 }
-export default Materias;
-const rootElement = document.getElementById("root");
-ReactDOM.render(<Materias/>, rootElement);
+export default Materias2;
+

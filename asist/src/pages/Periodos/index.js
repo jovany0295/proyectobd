@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './index.css';
 import axios from "axios";
 import Search from '../../components/Search';
+import ValidacionPeriodo from '../../Validacion/Periodos/Periodos'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 const url="http://127.0.0.1:8000/bd/v1/Periodo/";
@@ -13,7 +14,7 @@ state={
   modalInsertar: false,
   modalEliminar: false,
   form:{
-    id: '',
+  
     Descripcion: ''
   }
 }
@@ -22,7 +23,7 @@ onChange = async e =>{
   await this.setState({result: e.target.value});
   console.log(this.state.result);
 }
-peticionGet=()=>{
+peticionGet= () => {
 axios.get(url).then(response=>{
   this.setState({data: response.data});
   console.log(response.data);
@@ -58,7 +59,6 @@ seleccionarPeriodo=(periodo)=>{
   this.setState({
     tipoModal: 'actualizar',
     form: {
-        id: periodo.id,
         Descripcion:periodo.Descripcion  
     }
   })
@@ -122,31 +122,14 @@ console.log(this.state.form);
       </tbody>
     </table>
     <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
-                
+                <ModalHeader style={{ display: 'block' }}>
+                <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
+                </ModalHeader>
                 <ModalBody>
-                  <div className="form-group">
-                    <label >ID</label>
-                    <input className="form-control" type="text" name="id" id="id" readOnly 
-                    onChange={this.handleChange} value={form?form.id: this.state.data.length+1}/>
-                    <br />
-                    <label >Descripcion</label>
-                    <input className="form-control" type="text" name="Descripcion" id="Descripcion"
-                    onChange={this.handleChange} value={form?form.Descripcion: ''}/>
-                    <br />
-                  </div>
+                <ValidacionPeriodo/>
                 </ModalBody>
 
-                <ModalFooter>
-                  {this.state.tipoModal==='insertar'?
-                    <button className="btn btn-success" onClick={()=>this.peticionPost()}>
-                    Insertar
-                  </button>: 
-                  <button className="btn btn-primary" onClick={()=>this.peticionPut()}>
-                    Actualizar
-                  </button>
-                  }
-                    <button className="btn btn-danger" onClick={()=>this.modalInsertar()}>Cancelar</button>
-                </ModalFooter>
+                
       </Modal>
       <Modal className='ajustarmodal' isOpen={this.state.modalEliminar}>
           <ModalBody>
