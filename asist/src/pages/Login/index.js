@@ -12,13 +12,14 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import Image from '../../fachada/fachada.jpg'; // Import using relative path
+import axios from "axios";
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      {'Copyright � '}
+      <Link color="inherit" href="#">
+        Alfabuenamaravilla
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -29,14 +30,42 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
+  const [error, setError] = React.useState();
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const datos = new FormData(event.currentTarget);
+   
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      email: datos.get('email'),
+      password: datos.get('password'),
     });
+
+    
+    const API_URL = `http://localhost:8000/bd/v1/token/`;
+    
+    const user = ({
+      'username' :  datos.get('email'),
+      'password' : datos.get('password')
+    });
+
+    axios.post(API_URL, 
+      user, {
+        headers: {
+            'Content-Type': 'application/json'
+      }})
+    .then(response => { 
+        sessionStorage.setItem('token', response.data.access);
+        console.log(response.data.access)
+        window.location.href = '/';
+
+    })
+    .catch(error => {
+        console.log('ERRORR ES ' + error.response)
+        setError("Datos incorrectos, favor de verificar la información");
+    });
+
   };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -48,7 +77,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
+            backgroundImage: `url(${Image})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -70,7 +99,7 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Iniciar Sesion
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -78,7 +107,7 @@ export default function SignInSide() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Usuario"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -88,34 +117,35 @@ export default function SignInSide() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Contrasenia"
                 type="password"
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
+
+              {/* <Typography component="h1" variant="h5">
+                 Datos incorrectos Favor de Verificar la Informacion
+              </Typography> */}
+              
+              {error? <span style={{color: "red", display: "flex", justifyContent: "center"}}>{error}</span> : null }
+              
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Acceder
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
+                 
                 </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+               
               </Grid>
               <Copyright sx={{ mt: 5 }} />
             </Box>

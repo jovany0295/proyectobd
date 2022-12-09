@@ -33,6 +33,11 @@ import Person3Icon from '@mui/icons-material/Person3';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import SendTimeExtensionIcon from '@mui/icons-material/SendTimeExtension';
+import SendTimeExtension from '@mui/icons-material/SendTimeExtension';
+import BarChartIcon from '@mui/icons-material/BarChart';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -137,6 +142,18 @@ export default function MiniDrawer() {
  const handleClickHome = () => {
    navigate('/');
  }
+
+ const handleClickPeriodos = () => {
+  navigate('/Periodos');
+}
+
+const handleClickReunion = () => {
+  navigate('/Reunion');
+}
+const handleClickGraficos = () => {
+  navigate('/Graficos');
+}
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -195,18 +212,9 @@ export default function MiniDrawer() {
           <EmojiPeopleIcon />
         </ListItemIcon>
         <ListItemText primary="Asistencia" />
-        {open ? <ExpandLess /> : <ExpandMore />}
+      
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-        </List>
-      </Collapse>
+      
     </List>
         <Divider />
         <List>
@@ -214,25 +222,45 @@ export default function MiniDrawer() {
         <ListItemIcon>
           <Diversity3Icon/>
         </ListItemIcon>
-        <ListItemText primary="Reunion" />
-      </ListItemButton>
-      <ListItemButton onClick={ () => handleClickGrupos()} >
-        <ListItemIcon>
-          <GroupsIcon/>
-        </ListItemIcon>
-        <ListItemText primary="Asistencia" />
-      </ListItemButton>
-        <ListItemButton onClick={ () => handleClickGrupos()} >
-        <ListItemIcon>
-          <GroupsIcon/>
-        </ListItemIcon>
         <ListItemText primary="Grupos" />
+      </ListItemButton>
+      <ListItemButton onClick={ () => handleClickClase()} >
+        <ListItemIcon>
+          <GroupsIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Clase" />
+      </ListItemButton>
+        <ListItemButton onClick={ () => handleClickPeriodos()} >
+        <ListItemIcon>
+          <EventNoteIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Periodos" />
       </ListItemButton>
       <ListItemButton onClick={ () => handleClicklistas()} >
         <ListItemIcon>
           <AttachFileIcon/>
         </ListItemIcon>
         <ListItemText primary="Carga File" />
+      </ListItemButton>
+
+      <ListItemButton onClick={ () => handleClickMaterias()} >
+        <ListItemIcon>
+          < AutoStoriesIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Materias" />
+      </ListItemButton>
+
+      <ListItemButton onClick={ () => handleClickReunion()} >
+        <ListItemIcon>
+          <SendTimeExtensionIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Reunion" />
+      </ListItemButton>
+      <ListItemButton onClick={ () => handleClickGraficos()} >
+        <ListItemIcon>
+          <BarChartIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Graficos" />
       </ListItemButton>
       
         </List>

@@ -1,3 +1,4 @@
+
 import React, { memo, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, styled, Button, Alert, AlertTitle, Snackbar, Stack,  Checkbox,
@@ -5,17 +6,11 @@ import { Container, styled, Button, Alert, AlertTitle, Snackbar, Stack,  Checkbo
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import OpenFile from './ReadCSV';
 import SendIcon from '@mui/icons-material/Send';
-import EditIcon from "@mui/icons-material/Edit";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import FadeLoader from "react-spinners/FadeLoader";
 
-
-
-
 function ListInvitations() {
-
-
   //params from the previous page
   const { idPlacementTest } = useParams();
 
@@ -33,7 +28,6 @@ function ListInvitations() {
 
   //open modal to insert or update
   const [openModal, setOpenModal] = useState(false);
-
   //state for updated information
   const [alertVisible, setAlertVisible] = useState(false);
 
@@ -121,18 +115,21 @@ function ListInvitations() {
     reader.onload = function (e) {
       const text = e.target.result;
 
-      if (OpenFile.readCSV(text.replace(/\r/g, ''), 4) !== null) {
+      if (OpenFile.readCSV(text.replace(/\r/g, ''), 5) !== null) {
 
-        const listTemp = OpenFile.readCSV(text.replace(/\r/g, ''), 4);
+        const listTemp = OpenFile.readCSV(text.replace(/\r/g, ''), 5);
         
         listTemp.forEach(function(e, index){
           if (typeof e === "object" ){
+          
             e["index"] = index
           }
         });
 
         setListParticipants(listTemp);
-      } 
+      } else {
+        
+      }
     };
 
     reader.readAsText(file, 'ISO-8859-1'); // enable accents
@@ -251,18 +248,12 @@ function ListInvitations() {
           </TableCell>
           
           <TableCell component="th" scope="row" align="right" width="5%"> {i + 1} </TableCell>
-          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.name + " " + item.surnames} </TableCell>
-          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.email} </TableCell>
-          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.telephone} </TableCell>
-  
-          <TableCell component="th" align="right" width="10%">
-            <Button onClick={() => selectEdition(item.index)} sx={{ marginLeft: "40%" }}>
-              <EditIcon className="icon" />
-            </Button>
-          </TableCell>
-  
+          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.nombre} </TableCell>
+          <TableCell component="th" align="center" width="10%" style={{ textAlign: "center" }}> {item.semestre} </TableCell>
+          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.curp} </TableCell>
+          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.carrera} </TableCell>
+          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.correo} </TableCell>
         </StyledTableRow>
-  
       </React.Fragment>
     );
   }
@@ -272,19 +263,28 @@ function ListInvitations() {
     return (
       <TableRow>
         <StyledTableCell colSpan={6} align="center" style={{ fontSize: 30, color: '#d1d1d1', backgroundColor: '#fff' }}>
-          This placement test has no recorded results
-        </StyledTableCell>
+Vacio        </StyledTableCell>
       </TableRow>
     );
   }
 
 
   return (
-
     <>
       <Container className="align-middle mt-48">
-
-
+        <div class="position-relative">
+          <div class="position-absolute top-0 start-0">
+            <input type="text" class="form-control" placeholder='Buscar Alumno' />
+          </div>
+          <div class="position-absolute top-0 start-50 translate-middle">
+            <h2>Listado</h2>
+          </div>
+          <div class="position-absolute top-0 end-0">
+            <button className="btn btn-success">Agregar Alumno</button>
+          </div>
+        </div>
+        <br></br>
+        <br></br>
         <Snackbar
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={showError.open}
@@ -299,16 +299,16 @@ function ListInvitations() {
 
         {alertVisible === true ? <ShowAlert /> : null}
 
-        <h1 style={{textAlign: "center", marginBottom: "20px"}}> {selectedPT.name} </h1>
+        <h1 style={{ textAlign: "center", marginBottom: "20px" }}> {selectedPT.name} </h1>
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table collapsible table" >
             <TableHead>
               <TableRow>
-                <StyledTableCell padding="checkbox"> 
+                <StyledTableCell padding="checkbox">
                   <Checkbox
                     color="info"
-                    indeterminate={selected.length > 0 && selected.length  < listParticipants.length}
+                    indeterminate={selected.length > 0 && selected.length < listParticipants.length}
                     checked={listParticipants.length > 0 && selected.length === listParticipants.length}
                     onChange={handleSelectAllClick}
                     inputProps={{
@@ -316,11 +316,12 @@ function ListInvitations() {
                     }}
                   />
                 </StyledTableCell>
-                <StyledTableCell width="5%" align="left"> Index </StyledTableCell>
-                <StyledTableCell align="right" width="50%" style={{ textAlign: "center" }}> Full Name </StyledTableCell>
-                <StyledTableCell align="right" width="25%" style={{ textAlign: "center" }}> Email </StyledTableCell>
-                <StyledTableCell align="right" width="25%" style={{ textAlign: "center" }}> Telephone </StyledTableCell>
-                <StyledTableCell align="right" width="10%"> Edit </StyledTableCell>
+                <StyledTableCell width="5%" align="left"> ID </StyledTableCell>
+                <StyledTableCell align="right" width="20%" style={{ textAlign: "center" }}> Full Name </StyledTableCell>
+                <StyledTableCell align="right" width="5%" style={{ textAlign: "center" }}> semestre </StyledTableCell>
+                <StyledTableCell align="right" width="20%" style={{ textAlign: "center" }}> CURP </StyledTableCell>
+                <StyledTableCell align="right" width="15%" > Carrera </StyledTableCell>
+                <StyledTableCell align="right" width="30%" > correo </StyledTableCell>
               </TableRow>
             </TableHead>
 
@@ -341,20 +342,20 @@ function ListInvitations() {
                   page={page}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
-                 
                 />
               </TableRow>
             </TableFooter>
           </Table>
         </TableContainer>
 
-        <Stack direction="row" alignItems="right" spacing={3} style={{marginLeft: "40%"}}>
-
+        <Stack direction="row" alignItems="right" spacing={3} style={{marginLeft: "60%"}}>
+            
+        
           <Button 
             startIcon= {<FileUploadIcon />}
             variant="contained"
             component="label"
-            style={{ backgroundColor: "#111827", color: "white", marginTop: "20px", marginBottom: "20px", width: 200 }} >
+            style={{ backgroundColor: "#111827", color: "white", marginTop: "15px", marginBottom: "20px", width: 200 }} >
             Import file
             <input hidden accept=".csv" type="file" onChange={(e) => readFile(e.target.files[0], idPlacementTest)} />
           </Button>
@@ -364,16 +365,11 @@ function ListInvitations() {
           <Button onClick={() => selectInsert()}
             startIcon= {<PersonAddIcon />}
             variant="contained"
-            style={{ backgroundColor: "#111827", color: "white", marginTop: "20px", marginBottom: "20px", width: 220 }} >
+            style={{ backgroundColor: "#111827", color: "white", marginTop: "15px", marginBottom: "20px", width: 220 }} >
             Add new participant
           </Button>
 
-          <Button onClick={() => sendEmail()}
-            startIcon={<SendIcon />  }
-            variant="contained"
-            style={{ backgroundColor: "#111827", color: "white", marginTop: "20px", marginBottom: "20px", width: 200 }} >
-            Send email
-          </Button>
+          
         </Stack>
 
       </Container>

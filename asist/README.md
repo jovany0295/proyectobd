@@ -3,6 +3,7 @@ Jovany Yair Patiño Rayo
 <p style='text-align: center;'> Documentación Técnica sistema de asistencia.
 <p style='text-align: right;'> Construcción del Front-End Noviembre 2022.
 <br /> <br /> <br />
+Xiadani Gutierrez Rendon (emoxa)
 
 Tabla de Contenidos
 1. Tecnologías utilizadas	
@@ -34,6 +35,7 @@ npm install @mui/material @mui/styled-engine-sc styled-components
 npm install @mui/icons-material
 npm install reactstrap react react-dom
 npm install --save chart.js react-chartjs-2
+npm install react-datepicker --save
 npm start
 
 

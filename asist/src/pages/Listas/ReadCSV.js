@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from "react";
 
-  const readCSV = (str, rowNumber, delim = ",") => {
+  const readCSV = (str, rowNumber, delim = ";") => {
     
     const headers = str.slice(0, str.indexOf("\n")).split(delim);
     const rows = str.slice(str.indexOf("\n") + 1).split("\n");

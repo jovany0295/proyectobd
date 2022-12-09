@@ -28,7 +28,11 @@ onChange = async e =>{
 }
 
 peticionGet=()=>{
-axios.get(url).then(response=>{
+  let token = sessionStorage.getItem("token")
+axios.get(url, {
+  headers: {
+      'Authorization': 'Bearer ' + token
+}}).then(response=>{
   this.setState({data: response.data});
   console.log(response.data);
 
@@ -37,9 +41,13 @@ axios.get(url).then(response=>{
 })
 }
 
-peticionPost=async()=>{
+peticionPost=()=>{
+  let token = sessionStorage.getItem("token")
   delete this.state.form.id;
- await axios.post(url,this.state.form).then(response=>{
+ axios.post(url,this.state.form,{
+  headers: {
+      'Authorization': 'Bearer ' + token
+}}).then(response=>{
     this.modalInsertar();
     this.peticionGet();
   }).catch(error=>{
@@ -48,14 +56,23 @@ peticionPost=async()=>{
 }
 
 peticionPut=()=>{
-  axios.put(url+this.state.form.id + '/', this.state.form).then(response=>{
+  let token = sessionStorage.getItem("token")
+
+  axios.put(url+this.state.form.id + '/', this.state.form,{
+    headers: {
+        'Authorization': 'Bearer ' + token
+  }}).then(response=>{
     this.modalInsertar();
     this.peticionGet();
   })
 }
 
 peticionDelete=()=>{
-  axios.delete(url+this.state.form.id).then(response=>{
+  let token = sessionStorage.getItem("token")
+  axios.delete(url+this.state.form.id,{
+    headers: {
+        'Authorization': 'Bearer ' + token
+  }}).then(response=>{
     this.setState({modalEliminar: false});
     this.peticionGet();
   })
