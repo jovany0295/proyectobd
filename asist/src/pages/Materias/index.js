@@ -25,7 +25,7 @@ class Materias2 extends Component {
     modalEliminar: false,
     form: {
       id: '',
-      Nombre: '',
+      nombre: '',
       descripcion: ''
     }
   }
@@ -118,7 +118,7 @@ class Materias2 extends Component {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Nombre</th>
+                  <th>nombre</th>
                   <th>Descripcion</th>
                   <th>Action</th>
                 </tr>

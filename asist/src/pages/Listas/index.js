@@ -1,6 +1,6 @@
 
 import React, { memo, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Await, useParams } from "react-router-dom";
 import {
   Container, styled, Button, Alert, AlertTitle, Snackbar, Stack, Checkbox,
   Table, TableBody, TableContainer, TableFooter, TableHead, TableRow, TablePagination, Paper
@@ -12,6 +12,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import FadeLoader from "react-spinners/FadeLoader";
 import axios from "axios";
+
 
 function ListInvitations() {
   //params from the previous page
@@ -48,7 +49,7 @@ function ListInvitations() {
   const [selected, setSelected] = useState([]);
 
   //PT selected
-  const [selectedPT, setSelectedPT] = useState("");
+  const [selectedPT, setSelectedPT,file] = useState("");
 
   //catch an error
   const [showError, setShowError] = React.useState({
@@ -105,21 +106,69 @@ function ListInvitations() {
     setOpenModal(true);
     setAlertVisible(false);
   }
-  const insertar = () => {
-    let axiosArray = []
+  const insertar = async () => {
+    let headersList = {
+      "Accept": "*/*",
+      "User-Agent": "Thunder Client (https://www.thunderclient.com)"
+     }
+     console.log(file);
+     let bodyContent = new FormData();
+     bodyContent.append("datos",file);
+     
+     let response = await fetch("http://127.0.0.1:8000/bd/v1/File/", { 
+       method: "POST",
+       body: bodyContent,
+       headers: headersList
+     });
+     
+     let data = await response.text();
+     console.log(data);
+     
+
+  }
+
+
+  const insertar3 = async () => {
+    let headersList = {
+      "Accept": "*/*",
+      "User-Agent": "Thunder Client (https://www.thunderclient.com)"
+    }
+    let arraypromise = []
+    let datas = JSON.stringify(selected)
+    console.log(datas)
+    let reqOptions = {
+      url: "http://127.0.0.1:8000/bd/v1/Alumno/",
+      method: "POST",
+      headers: headersList,
+      data: datas,
+    }
+
+
+
+    await axios.request(reqOptions);
+
+  }
+  const insertar2 = async () => {
+    let arraypromise = []
     for (let i = 0; i < selected.length; i++) {
-      let newPromise = axios.post(urlAlumno,selected[i])
-      axiosArray.push(newPromise)
-      console.log(axiosArray)
-    }      
-    axios
-      .all(axiosArray)
-      .then(axios.spread((...responses) => {
-        responses.forEach(res => console.log('Success'))
-        console.log('submitted all axios calls');
-      }))
+
+      const promises = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(axios.post(urlAlumno, selected[i]))
+
+        }, 1 * 1000);
+      });
+      arraypromise.push(promises)
+      console.log(arraypromise)
+    }
+
+    Promise.all([arraypromise]).then(axios.spread((...responses) => {
+      responses.forEach(res => console.log('Success'))
+      console.log('submitted all axios calls');
+    }))
       .catch(error => { })
   }
+
 
   const closeSnack = () => {
     setShowError({ open: false, message: "" });

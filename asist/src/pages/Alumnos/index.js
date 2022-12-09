@@ -112,6 +112,7 @@ class Alumnos extends Component {
   componentDidMount() {
     this.peticionGet();
     this.peticionGetCarrera();
+   
   }
 
   render() {

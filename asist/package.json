@@ -56,5 +56,16 @@
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
     "@types/react-bootstrap": "^0.32.32"
-  }
+  },
+  "browser": {
+    "crypto": false,
+    "fs": false,
+    "path": false,
+    "os": false,
+    "net": false,
+    "stream": false,
+    "tls": false
+    }
+  
 }
+
