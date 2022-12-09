@@ -49,20 +49,13 @@
   left: 4%;
 }
 
-.contenedoropciones {
-  width:30%;
+.contenedoropciones2 {
+  width:80%;
   height: 500px;
   font-family: Georgia, 'Times New Roman', Times, serif;
   padding-left: 50px;
 
 }
-.contenedorgrafico {
-  width: 70%;
-  height: 500px;
-  padding-left: 50px;
-
-}
-
 
 .seleccion{
   width: 100%;
@@ -71,4 +64,12 @@
   margin-left: 10px;
   margin-right: 10px;  
 
+}
+
+.estiloGraficas{
+  height: 500px;
+}
+
+.estiloGpastel{
+  height: 300px;
 }
