@@ -1,6 +1,6 @@
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
-import { seleccionMes, seleccionAnio } from './filtros';
+import { seleccionMes, seleccionAnio, seleccionRango } from './filtros';
 
 import {
   Chart as ChartJS,
@@ -50,6 +50,10 @@ export function Graficas(props) {
 
     if (props.TipoPeriodo == 'anio') {
       [etiquetas, asistencias, retardos, faltas] = seleccionAnio(props.TipoDatos, props.listaReunion, props.listaAsistencias, props.startDate, props.NombreClase, props.NombreAlumno)
+    }
+
+    if (props.TipoPeriodo == 'rangos' && props.dateRange[0] && props.dateRange[1]) {
+      [etiquetas, asistencias, retardos, faltas] = seleccionRango(props.TipoDatos, props.listaReunion, props.listaAsistencias, props.startDate, props.NombreClase, props.NombreAlumno, props.dateRange)
     }
 
     const data = {

@@ -117,6 +117,7 @@ const App = () => {
               NombreClase={NombreClase}
               NombreAlumno={NombreAlumno}
               TipoPeriodo={TipoPeriodo}
+              dateRange={dateRange}
             />
           </div>
 

@@ -548,3 +548,52 @@ export const seleccionAnio = (TipoDatos, listaReunion, listaAsistencias, startDa
 
 
 }
+
+
+export const seleccionRango = (TipoDatos, listaReunion, listaAsistencias, startDate, NombreClase, NombreAlumno, dateRange) => {
+
+  var etiquetas = []
+  var asistencias = []
+  var retardos = []
+  var faltas = []
+
+  if (TipoDatos == "btnradioGrupos") {
+
+    const datos = listaReunion.filter(e =>
+      e.idClase == NombreClase &&
+      new Date(e.fecha).getTime() > dateRange[0].getTime() &&
+      new Date(e.fecha).getTime() < dateRange[1].getTime()
+    ).map(function (clase) { return [clase.fecha, clase.asistencias, clase.retardos, clase.faltas]; })
+
+    for (var i = 0; i < datos.length; i++) {
+      etiquetas.push(datos[i][0]);
+      asistencias.push(datos[i][1]);
+      retardos.push(datos[i][2]);
+      faltas.push(datos[i][3]);
+    }
+
+    return [etiquetas, asistencias, retardos, faltas]
+
+  }
+
+  if (TipoDatos == "btnradioAlumnos") {
+
+    const datos = listaAsistencias.filter(e =>
+      e.Clase == NombreClase &&
+      e.idAlumno == NombreAlumno &&
+      new Date(e.Fecha).getTime() > dateRange[0].getTime() &&
+      new Date(e.Fecha).getTime() < dateRange[1].getTime()
+    ).map(function (clase) { return [clase.Fecha, clase.diferencia, clase.accion]; })
+
+    for (var i = 0; i < datos.length; i++) {
+      etiquetas.push(datos[i][0]);
+      asistencias.push(datos[i][1]);
+    }
+
+    retardos=[]
+    faltas=[]
+    return [etiquetas, asistencias, retardos, faltas]
+
+  }
+
+}
