@@ -100,10 +100,6 @@ class Materias2 extends Component {
               </div>
               <div className="row">
                 <div className="col-lg-12">
-     
-            <h2>Materias</h2>
-            <br />
-
             <div class="mb-3 row">
               <div class="col-sm-4">
                 <input type="text" class="form-control" placeholder='Buscar Materia' value={this.state.result} onChange={this.onChange} />

@@ -28,6 +28,7 @@ function ListInvitations() {
       fontSize: 14,
     },
   }));
+ 
 
   const [listParticipants, setListParticipants] = useState([]);
 
@@ -107,22 +108,17 @@ function ListInvitations() {
     setAlertVisible(false);
   }
   const insertar = async () => {
-    let headersList = {
-      "Accept": "*/*",
-      "User-Agent": "Thunder Client (https://www.thunderclient.com)"
-     }
-     console.log(file);
-     let bodyContent = new FormData();
-     bodyContent.append("datos",file);
-     
-     let response = await fetch("http://127.0.0.1:8000/bd/v1/File/", { 
-       method: "POST",
-       body: bodyContent,
-       headers: headersList
-     });
-     
-     let data = await response.text();
-     console.log(data);
+    console.log(file)
+    let bodyContent = new FormData();
+    bodyContent.append("datos", file);
+
+    let response = await fetch("http://127.0.0.1:8000/bd/v1/File/", { 
+      method: "POST",
+      body: bodyContent,
+    });
+
+    let data = await response.text();
+    console.log(data);
      
 
   }
@@ -175,16 +171,25 @@ function ListInvitations() {
   };
 
 
-  const readFile = (file, idPlacementTest) => {
+  const readFile = async (file, idPlacementTest) => {
+     console.log(file)
+      let bodyContent = new FormData();
+      bodyContent.append("datos", file);
 
+       let response = await fetch("http://127.0.0.1:8000/bd/v1/File/", { 
+         method: "POST",
+         body: bodyContent,
+       });
     const reader = new FileReader();
+     
 
+     
     reader.onload = function (e) {
       const text = e.target.result;
 
-      if (OpenFile.readCSV(text.replace(/\r/g, ''), 7) !== null) {
+      if (OpenFile.readCSV(text.replace(/\r/g, ''), 3) !== null) {
 
-        const listTemp = OpenFile.readCSV(text.replace(/\r/g, ''), 7);
+        const listTemp = OpenFile.readCSV(text.replace(/\r/g, ''), 3);
 
         setListParticipants(listTemp);
       } else {
@@ -259,8 +264,6 @@ function ListInvitations() {
 
     const isItemSelected = isSelected(item)
 
-    item.semestre = parseInt(item.semestre, 10)
-    item.id_carrera = parseInt(item.id_carrera, 10)
     return (
       <React.Fragment key={item.index}>
 
@@ -284,14 +287,10 @@ function ListInvitations() {
           </TableCell>
 
           <TableCell component="th" scope="row" align="right" width="5%"> {i + 1} </TableCell>
-          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.nombre} </TableCell>
-          <TableCell component="th" align="center" width="10%" style={{ textAlign: "center" }}> {item.apellidoP} </TableCell>
-          <TableCell component="th" align="center" width="10%" style={{ textAlign: "center" }}> {item.apellidoM} </TableCell>
-          <TableCell component="th" align="center" width="10%" style={{ textAlign: "center" }}> {item.semestre} </TableCell>
-          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.CURP} </TableCell>
-          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.correo} </TableCell>
-          <TableCell component="th" align="center" width="50%" style={{ textAlign: "center" }}> {item.id_carrera} </TableCell>
-
+          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.NombreC} </TableCell>
+          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.Accion} </TableCell>
+          <TableCell component="th" align="center" width="30%" style={{ textAlign: "center" }}> {item.Tiempo} </TableCell>
+       
         </StyledTableRow>
       </React.Fragment>
     );
@@ -356,13 +355,10 @@ function ListInvitations() {
                   />
                 </StyledTableCell>
                 <StyledTableCell width="5%" align="left"> ID </StyledTableCell>
-                <StyledTableCell align="right" width="10%" style={{ textAlign: "center" }}> Full Name </StyledTableCell>
-                <StyledTableCell align="right" width="10%" style={{ textAlign: "center" }}> ApellidoP </StyledTableCell>
-                <StyledTableCell align="right" width="10%" style={{ textAlign: "center" }}> ApellidoM </StyledTableCell>
-                <StyledTableCell align="right" width="5%" style={{ textAlign: "center" }}> semestre </StyledTableCell>
-                <StyledTableCell align="right" width="20%" style={{ textAlign: "center" }}> CURP </StyledTableCell>
-                <StyledTableCell align="right" width="30%" > correo </StyledTableCell>
-                <StyledTableCell align="right" width="30%" > id_carrera </StyledTableCell>
+                <StyledTableCell align="right" width="30%" style={{ textAlign: "center" }}>Nombre Completo </StyledTableCell>
+                <StyledTableCell align="right" width="30%" style={{ textAlign: "center" }}>Accion</StyledTableCell>
+                <StyledTableCell align="right" width="30%" style={{ textAlign: "center" }}>Tiempo</StyledTableCell>
+
 
               </TableRow>
             </TableHead>
