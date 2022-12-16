@@ -4,6 +4,7 @@ export const seleccionMes = (TipoDatos, listaReunion, listaAsistencias, startDat
   var asistencias = []
   var retardos = []
   var faltas = []
+  var accion = []
 
   if (TipoDatos == "btnradioGrupos") {
 
@@ -20,7 +21,9 @@ export const seleccionMes = (TipoDatos, listaReunion, listaAsistencias, startDat
       faltas.push(datos[i][3]);
     }
 
-    return [etiquetas, asistencias, retardos, faltas]
+    var totalAsistencias = [asistencias.reduce((a, b) => a + b, 0), retardos.reduce((a, b) => a + b, 0), faltas.reduce((a, b) => a + b, 0)]
+
+    return [etiquetas, asistencias, retardos, faltas, totalAsistencias]
 
   }
 
@@ -39,10 +42,23 @@ export const seleccionMes = (TipoDatos, listaReunion, listaAsistencias, startDat
     for (var i = 0; i < datos.length; i++) {
       etiquetas.push(datos[i][0]);
       asistencias.push(datos[i][1]);
+      accion.push(datos[i][2]);
+    }
+
+    var tempAsistencias = 0
+    var tempRetardos = 0
+    var tempFaltas = 0
+
+    for (var i = 0; i < accion.length; i++) {
+      if (accion[i] == 'asistio') tempAsistencias += 1
+      if (accion[i] == 'retardo') tempRetardos += 1
+      if (accion[i] == 'falta') tempFaltas += 1
 
     }
 
-    return [etiquetas, asistencias, retardos, faltas]
+    var totalAsistencias = [tempAsistencias, tempRetardos, tempFaltas]
+
+    return [etiquetas, asistencias, retardos, faltas, totalAsistencias]
 
   }
 
@@ -275,7 +291,10 @@ export const seleccionAnio = (TipoDatos, listaReunion, listaAsistencias, startDa
 
     ]
 
-    return [etiquetas, asistencias, retardos, faltas]
+    var totalAsistencias = [asistencias.reduce((a, b) => a + b, 0), retardos.reduce((a, b) => a + b, 0), faltas.reduce((a, b) => a + b, 0)]
+
+
+    return [etiquetas, asistencias, retardos, faltas, totalAsistencias]
 
 
   }
@@ -541,7 +560,13 @@ export const seleccionAnio = (TipoDatos, listaReunion, listaAsistencias, startDa
     NumFaltas.push(tempFaltas);
     etiquetas = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
-    return [etiquetas, NumAsistencias, NumRetardos, NumFaltas]
+    var totalAsistencias = [
+      NumAsistencias.reduce((a, b) => a + b, 0),
+      NumRetardos.reduce((a, b) => a + b, 0) ,
+      NumFaltas.reduce((a, b) => a + b, 0) 
+    ]
+
+    return [etiquetas, NumAsistencias, NumRetardos, NumFaltas, totalAsistencias]
 
   }
 
@@ -556,6 +581,7 @@ export const seleccionRango = (TipoDatos, listaReunion, listaAsistencias, startD
   var asistencias = []
   var retardos = []
   var faltas = []
+  var accion = []
 
   if (TipoDatos == "btnradioGrupos") {
 
@@ -572,7 +598,10 @@ export const seleccionRango = (TipoDatos, listaReunion, listaAsistencias, startD
       faltas.push(datos[i][3]);
     }
 
-    return [etiquetas, asistencias, retardos, faltas]
+    var totalAsistencias = [asistencias.reduce((a, b) => a + b, 0), retardos.reduce((a, b) => a + b, 0), faltas.reduce((a, b) => a + b, 0)]
+
+
+    return [etiquetas, asistencias, retardos, faltas, totalAsistencias]
 
   }
 
@@ -588,11 +617,22 @@ export const seleccionRango = (TipoDatos, listaReunion, listaAsistencias, startD
     for (var i = 0; i < datos.length; i++) {
       etiquetas.push(datos[i][0]);
       asistencias.push(datos[i][1]);
+      accion.push(datos[i][2]);
     }
 
-    retardos=[]
-    faltas=[]
-    return [etiquetas, asistencias, retardos, faltas]
+    var tempAsistencias = 0
+    var tempRetardos = 0
+    var tempFaltas = 0
+
+    for (var i = 0; i < accion.length; i++) {
+      if (accion[i] == 'asistio') tempAsistencias += 1
+      if (accion[i] == 'retardo') tempRetardos += 1
+      if (accion[i] == 'falta') tempFaltas += 1
+
+    }
+
+    var totalAsistencias = [tempAsistencias, tempRetardos, tempFaltas]
+    return [etiquetas, asistencias, retardos, faltas, totalAsistencias]
 
   }
 

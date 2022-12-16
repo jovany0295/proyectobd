@@ -5,7 +5,7 @@ import { Graficas, Filtro, Periodo, GraficaPastel } from './componentes';
 
 const App = () => {
 
-  const [listaAsistencias,setListaAsistencias] = useState()
+  const [listaAsistencias, setListaAsistencias] = useState()
   const [listaReunion, setListaReunion] = useState()
   const [listaAlumnos, setListaAlumno] = useState()
   const [listaClases, setListaClases] = useState()
@@ -63,8 +63,8 @@ const App = () => {
               setListaAlumno={setListaAlumno}
               setListaClases={setListaClases}
               setListaReunion={setListaReunion}
-              setNombreClase = {setNombreClase}
-              setNombreAlumno = {setNombreAlumno}
+              setNombreClase={setNombreClase}
+              setNombreAlumno={setNombreAlumno}
               listaAsistencias={listaAsistencias}
               listaAlumnos={listaAlumnos}
               listaClases={listaClases}
@@ -89,7 +89,17 @@ const App = () => {
               endDate={endDate}
               setDateRange={setDateRange}
             />
-            <GraficaPastel />
+            <GraficaPastel
+              Grafico={Grafico}
+              listaReunion={listaReunion}
+              listaAsistencias={listaAsistencias}
+              TipoDatos={TipoDatos}
+              startDate={startDate}
+              NombreClase={NombreClase}
+              NombreAlumno={NombreAlumno}
+              TipoPeriodo={TipoPeriodo}
+              dateRange={dateRange}
+            />
 
           </div>
 

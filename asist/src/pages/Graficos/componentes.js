@@ -39,6 +39,9 @@ var asistencias = []
 var retardos = []
 var faltas = []
 
+var totalAsistencias = []
+
+
 
 export function Graficas(props) {
 
@@ -206,41 +209,51 @@ export const Periodo = (props) => {
 
 export function GraficaPastel(props) {
 
-  const data = {
-    labels: ['lunes', 'sabado', 'domingo'],
-    datasets: [
-      {
-        label: 'Asistencias',
-        data: [34, 54, 43],
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        borderWidth: 1,
-      },
-      {
-        label: 'Retardos',
-        data: [21, 12, 32],
-        borderColor: 'rgba(255, 206, 86, 1)',
-        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-        borderWidth: 1,
-      },
-      {
-        label: 'Faltas',
-        data: [41, 22, 21],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        borderWidth: 1,
-      },
-    ],
-  };
+  if (props.listaReunion && props.listaAsistencias) {
 
+    if (props.TipoPeriodo == 'mes') {
+      [etiquetas, asistencias, retardos, faltas, totalAsistencias] = seleccionMes(props.TipoDatos, props.listaReunion, props.listaAsistencias, props.startDate, props.NombreClase, props.NombreAlumno)
+      
+      console.log(totalAsistencias)
+    }
 
-  return (
-    <>
-      <div className='estiloGpastel'>
-        <Pie options={opciones} data={data} />
-      </div>
-    </>
-  );
+    if (props.TipoPeriodo == 'anio') {
+      [etiquetas, asistencias, retardos, faltas, totalAsistencias] = seleccionAnio(props.TipoDatos, props.listaReunion, props.listaAsistencias, props.startDate, props.NombreClase, props.NombreAlumno)
+    }
+
+    if (props.TipoPeriodo == 'rangos' && props.dateRange[0] && props.dateRange[1]) {
+      [etiquetas, asistencias, retardos, faltas, totalAsistencias] = seleccionRango(props.TipoDatos, props.listaReunion, props.listaAsistencias, props.startDate, props.NombreClase, props.NombreAlumno, props.dateRange)
+    }
+
+    const dataP = {
+      labels: ['asistencias', 'retardos', 'faltas'],
+      datasets: [
+        {
+          label: '# Total: ',
+          data: totalAsistencias,
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(255, 99, 132, 1)',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+
+    return (
+      <>
+        <div className='estiloGpastel'>
+          <Pie options={opciones} data={dataP} />
+        </div>
+      </>
+    );
+  }
 
 }
 
