@@ -29,7 +29,8 @@ class Grupo extends Component {
                  }
     this.state.form ={
       id: '',
-      Nombre: ''
+      Nombre: '',
+      cantidad_alumnos:''
       
                     }
                   
@@ -111,7 +112,7 @@ class Grupo extends Component {
   }
   modalInsertar = () => {
     //this.setState({ modalInsertar: !this.state.modalInsertar });
-    this.setState({modalInsertar: false});
+    this.setState({ modalInsertar:false});
   }
   modalAlumnos = () => {
     this.setState({modalAlumnos: false});
@@ -175,9 +176,9 @@ class Grupo extends Component {
     console.log(this.state.formAlumnos);
   }
   componentDidMount() {
-    //this.peticionGet();
-    //this.peticionGetAlumnos();
-   // this.peticionGetGrupoAlumnos();
+    this.peticionGet();
+    this.peticionGetAlumnos();
+    this.peticionGetGrupoAlumnos();
   }
   render() {
     const { form } = this.state;

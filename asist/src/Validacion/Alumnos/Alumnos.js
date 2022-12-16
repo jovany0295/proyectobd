@@ -169,7 +169,7 @@ const ValidacionAlumnos = (props) => {
                
                 type="text"
                 name="semestre"
-                placeholder="Semestre ejemplo: 3"
+                placeholder="Agrega el semestre"
                 id="semestre"
               />
               {touched.semestre && errors.semestre && <div className='error'>{errors.semestre}</div>}
@@ -195,8 +195,6 @@ const ValidacionAlumnos = (props) => {
               {touched.correo && errors.correo && <div className='error'>{errors.correo}</div>}
               
             </div>
-
-            
 
             <button type="submit"  >Guardar</button>
           </Form>

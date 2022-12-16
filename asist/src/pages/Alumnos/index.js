@@ -192,9 +192,8 @@ class Alumnos extends Component {
                       </div>
                       <ValidacionAlumnos 
                       datacarrera ={this.state.dataCarrera}
-                      mod={this.modalInsertar()}
-                      />
-                      
+                      mod={this.modalInsertar()}/>
+                                      
                    
                 </ModalBody>
 
