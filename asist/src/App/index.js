@@ -7,10 +7,14 @@ import {
 import Header from '../components/Header'
 import routes from '../router'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { GlobalProvider } from '../Context/Reunionctx1'
 
 const App = () => {
+
+  
   return(
     <>
+      
       <BrowserRouter>
        {
        window.location.href !== "http://localhost:3000/login" ? <Header /> : null }
@@ -29,7 +33,7 @@ const App = () => {
         </Routes>
         
       </BrowserRouter>
-   
+     
     </>
   )
 }

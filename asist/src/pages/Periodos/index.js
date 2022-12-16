@@ -8,16 +8,21 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 const url="http://127.0.0.1:8000/bd/v1/Periodo/";
 
 class Periodos extends Component {
-state={
-  result:'',
-  data:[],
-  modalInsertar: false,
-  modalEliminar: false,
-  form:{
-  
-    Descripcion: ''
-  }
-}
+
+  constructor(props) {
+    super(props);
+    //this.handleChangeclase = this.handleChangeclase.bind(this);
+    this.state = {
+      result: '',
+      data: [],
+      modalInsertar: false,
+      modalEliminar: false, 
+                 }
+    this.state.form ={
+      Descripcion: ''
+                    }
+                    };
+
 onChange = async e =>{
   e.persist();
   await this.setState({result: e.target.value});
@@ -53,7 +58,9 @@ peticionDelete=()=>{
   })
 }
 modalInsertar=()=>{
-  this.setState({modalInsertar: !this.state.modalInsertar});
+  this.setState({ modalInsertar:false});
+  this.peticionGet();
+ // this.setState({modalInsertar: !this.state.modalInsertar});
 }
 seleccionarPeriodo=(periodo)=>{
   this.setState({
@@ -92,7 +99,7 @@ console.log(this.state.form);
               <div class="col-sm-4">
               </div>
               <div class="col-sm-4">
-              <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar Periodo</button>
+              <button className="btn btn-success" onClick={()=>{this.setState({form: null, tipoModal: 'insertar'}); this.setState({ modalInsertar: true }) }}>Agregar Periodo</button>
               </div>
             </div>
    
@@ -126,7 +133,10 @@ console.log(this.state.form);
                 <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
                 </ModalHeader>
                 <ModalBody>
-                <ValidacionPeriodo/>
+                <ValidacionPeriodo
+                mod ={this.state.modalInsertar}
+                mod2={this.modalInsertar}
+                />
                 </ModalBody>
 
                 

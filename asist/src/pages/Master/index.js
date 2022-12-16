@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from "axios";
 import Search from '../../components/Search';
+import ValidacionMaestros from '../../Validacion/Maestros/Maestros'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { margin } from '@mui/system';
 
@@ -95,9 +96,6 @@ seleccionarMaestro=(maestro)=>{
   })
 }
 
-
-
-
 handleChange=async e=>{
 e.persist();
 await this.setState({
@@ -139,6 +137,7 @@ console.log(this.state.form);
           <th>Nombre</th>
           <th>RFC</th>
           <th>Action</th>
+          
         </tr>
       </thead>
       <tbody>
@@ -167,40 +166,8 @@ console.log(this.state.form);
                   <span style={{float: 'right'}} onClick={()=>this.modalInsertar()}>x</span>
                 </ModalHeader>
                 <ModalBody>
-                  <div className="form-group">
-                    <label htmlFor="id">ID</label>
-                    <input className="form-control" type="text" name="id" id="id" readOnly 
-                    onChange={this.handleChange} value={form?form.id: this.state.data.length+1}/>
-                    <br />
-                    <label htmlFor="nombre">ApellidoP</label>
-                    <input className="form-control" type="text" name="apellidoP" id="apellidoP"
-                     onChange={this.handleChange} value={form?form.apellidoP: ''}/>
-                    <br />
-                    <label htmlFor="nombre">ApellidoM</label>
-                    <input className="form-control" type="text" name="apellidoM" id="apellidoM"
-                     onChange={this.handleChange} value={form?form.apellidoM: ''}/>
-                    <br />
-                    <label htmlFor="nombre">Nombre</label>
-                    <input className="form-control" type="text" name="nombre" id="nombre"
-                     onChange={this.handleChange} value={form?form.nombre: ''}/>
-                    <br />
-                    <label htmlFor="nombre">RFC</label>
-                    <input className="form-control" type="text" name="RFC" id="RFC"
-                     onChange={this.handleChange} value={form?form.RFC: ''}/>
-                    <br />
-                  </div>
+                <ValidacionMaestros/>
                 </ModalBody>
-
-                <ModalFooter>
-                  {this.state.tipoModal==='insertar'?
-                    <button className="btn btn-success" onClick={()=>this.peticionPost()}>
-                    Insertar
-                  </button>: <button className="btn btn-primary" onClick={()=>this.peticionPut()}>
-                    Actualizar
-                  </button>
-  }
-                    <button className="btn btn-danger" onClick={()=>this.modalInsertar()}>Cancelar</button>
-                </ModalFooter>
           </Modal>
 
 

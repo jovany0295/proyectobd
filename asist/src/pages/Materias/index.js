@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext, useState } from "react";
 import ReactDOM from "react-dom";
 //import React, { Component } from 'react';
 import * as Yup from "yup";
@@ -12,23 +12,24 @@ import { Modal, ModalBody, ModalFooter, ModalHeader, Badge } from 'reactstrap';
 
 const url = "http://127.0.0.1:8000/bd/v1/Materia/";
 
-
-
-
-
- 
 class Materias2 extends Component {
-  state = {
-    result: '',
-    data: [],
-    modalInsertar: false,
-    modalEliminar: false,
-    form: {
+  
+  constructor(props) {
+    super(props);
+    //this.handleChangeclase = this.handleChangeclase.bind(this);
+    this.state = {
+      result: '',
+      data: [],
+      modalInsertar: false,
+      modalEliminar: false, 
+                 }
+    this.state.form ={
       id: '',
       Nombre: '',
       descripcion: ''
-    }
-  }
+                    }
+    };
+ 
   onChange = async e => {
     e.persist();
     await this.setState({ result: e.target.value });
@@ -63,7 +64,9 @@ class Materias2 extends Component {
     })
   }
   modalInsertar = () => {
-    this.setState({ modalInsertar: !this.state.modalInsertar });
+   
+    this.setState({ modalInsertar:false});
+    this.peticionGet();
   }
   seleccionarMateria = (materia) => {
     this.setState({
@@ -111,7 +114,7 @@ class Materias2 extends Component {
               <div class="col-sm-4">
               </div>
               <div class="col-sm-4">
-                <button className="btn btn-success" type="submit" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Materia</button>
+                <button className="btn btn-success" type="submit" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.setState({ modalInsertar: true }) }}>Agregar Materia</button>
               </div>
             </div>
             <table className="table" class="table table-striped table-hover">
@@ -148,7 +151,9 @@ class Materias2 extends Component {
                   <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
                 </ModalHeader>
                 <ModalBody>
-                  <ValidacionMaterias/>
+                  <ValidacionMaterias 
+                  mod={this.modalInsertar}
+                  />
                 </ModalBody>
 
               </Modal>

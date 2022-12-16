@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ValidacionGrupoagr from '../../Validacion/GrupoAgregar/GrupoAgr'
 import Search from '../../components/Search';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
@@ -11,29 +12,38 @@ const urlAlumnos = "http://localhost:8000/bd/v1/Alumno/";
 const urlGrupoAlumnos = "http://localhost:8000/bd/v1/Grupo_has_Alumnos/";
 
 class Grupo extends Component {
-  state = {
-    result: '',
-    data: [],
-    dataAlumnos: [],
-    dataGrupoAlumnos: [],
-    modalInsertar: false,
-    modalEliminar: false,
-    modalAlumnos: false,
-    modalEliminarAlumno: false,
-    modalGrupoAlumnos: false,
-    form: {
+
+  constructor(props) {
+    super(props);
+   
+    this.state = {
+      result: '',
+      data: [],
+      dataAlumnos: [],
+      dataGrupoAlumnos: [],
+      modalInsertar: false,
+      modalEliminar: false, 
+      modalAlumnos: false,
+      modalEliminarAlumno: false,
+      modalGrupoAlumnos: false,
+                 }
+    this.state.form ={
       id: '',
-      nombre: '',
-    },
-    formGrupoAlumnos: {
-      id: '',
-      idGrupo: '',
-      idAlumno: '',
-    },
-    formAlumnos: {
-      nombre: ''
-    }
-  }
+      Nombre: ''
+      
+                    }
+                  
+    this.state.formGrupoAlumnos ={
+                    id: '',
+                    idGrupo: '',
+                    idAlumno: ''
+                  }
+
+    this.state.formAlumnos={
+                    nombre: ''
+                  }
+    };
+
   onChange = async e => {
     e.persist();
     await this.setState({ result: e.target.value });
@@ -100,13 +110,14 @@ class Grupo extends Component {
     })
   }
   modalInsertar = () => {
-    this.setState({ modalInsertar: !this.state.modalInsertar });
+    //this.setState({ modalInsertar: !this.state.modalInsertar });
+    this.setState({modalInsertar: false});
   }
   modalAlumnos = () => {
-    this.setState({ modalAlumnos: !this.state.modalAlumnos });
+    this.setState({modalAlumnos: false});
   }
   modalGrupoAlumnos = () => {
-    this.setState({ modalGrupoAlumnos: !this.state.modalGrupoAlumnos });
+    this.setState({modalGrupoAlumnos: false});
   }
   seleccionarGrupo = (grupo) => {
     this.setState({
@@ -164,9 +175,9 @@ class Grupo extends Component {
     console.log(this.state.formAlumnos);
   }
   componentDidMount() {
-    this.peticionGet();
-    this.peticionGetAlumnos();
-    this.peticionGetGrupoAlumnos();
+    //this.peticionGet();
+    //this.peticionGetAlumnos();
+   // this.peticionGetGrupoAlumnos();
   }
   render() {
     const { form } = this.state;
@@ -185,7 +196,7 @@ class Grupo extends Component {
                 <button className="btn btn-danger" onClick={() => { this.setState({ modalGrupoAlumnos: true }) }}>Asignar</button>
               </div>
               <div class="col-sm-4">
-                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Grupo</button>
+                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.setState({ modalInsertar: true }) }}>Agregar Grupo</button>
               </div>
             </div>
             <table className="table" class="table table-striped table-hover">
@@ -220,27 +231,19 @@ class Grupo extends Component {
           <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
 
             <ModalHeader style={{ display: 'block' }}>
-              <h5 class="modal-title" id="exampleModalLongTitle">Grupo</h5>
+              {/* <h5 class="modal-title" id="exampleModalLongTitle">Grupo</h5> */}
+              <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
             </ModalHeader>
 
             <ModalBody>
-              <div className="form-group">
-
-                <label htmlFor="id">ID</label>
-                <input className="form-control" type="text" name="id" id="id" readOnly
-                  onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
-                <br />
-
-                <label htmlFor="nombre">Nombre</label>
-                <input className="form-control" type="text" name="nombre" id="nombre"
-                  onChange={this.handleChange} value={form ? form.nombre : ''} />
-                <br />
-
-              </div>
+                  <ValidacionGrupoagr  
+                    //dataclase ={this.state.dataClase}
+                    mod={this.modalInsertar()}
+                    /> 
             </ModalBody>
 
             <ModalFooter>
-              {
+           {
                 this.state.tipoModal === 'insertar' ?
                   <button className="btn btn-success" onClick={() => this.peticionPost()}>
                     Insertar
@@ -265,6 +268,8 @@ class Grupo extends Component {
             </ModalFooter>
 
           </Modal>
+
+
 
           <Modal isOpen={this.state.modalEliminarAlumno}>
             <ModalBody>

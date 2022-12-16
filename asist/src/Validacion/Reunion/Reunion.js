@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import '../../Validacion/Periodos/Periodos.css';
+import '../../Validacion/Reunion/Reunion.css';
 import { Formik, Form, Field, ErrorMessage, setIn } from 'formik';
 import Reunion from '../../pages/Reunion';
 import axios from "axios";
 import * as Yup from "yup";
+import { modalClasses, useThemeProps } from '@mui/material';
+import {toast} from 'react-toastify';
 
 const url = "http://127.0.0.1:8000/bd/v1/Reunion/";
 
@@ -12,27 +14,22 @@ const reunionSchema = Yup.object().shape({
   
   
   cantidad_alumnos:  Yup.number()
+    .required("Campo Requerido")
     .integer("Ingresa números enteros")
     .positive("Ingresa un número mayor que 0"),
 
-  fecha: Yup.date()
-    .required("campo Requerido"),
   
   detalle: Yup.string()
     .required("Campo Requerido")
-    .min(5, "Mínimo 5 caracteres")
+    .min(5, "Mínimo 5 caracteres"),
     //.matches(/^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi ,"Sólo caracteres latinos.")
-    .matches(/^\s*[\S]+(\s[\S]+)+\s*$/gms, 'Periodo completo'),
-
-  idclase: Yup.number()
-    .integer("Ingresa números enteros")
-    .positive("Ingresa un número mayor que 0"),
-      
+    //.matches(/^\s*[\S]+(\s[\S]+)+\s*$/gms, 'Periodo completo'),
+   
 });
 
-const ValidacionReunion = () => {
+const ValidacionReunion = (props) => {
   
-  
+  const notify = ( msg ) => toast( msg )
   return (
 
     <>
@@ -40,24 +37,43 @@ const ValidacionReunion = () => {
       <Formik
 
         initialValues={{
-         
-          cantidad_alumnos: '',
+          asistencias: '',
+          retardos: '',
+          faltas: '',
           fecha: '',
-          detalle: '',
           idclase: '',
+          detalle: '',
+          
         }}
-
-       
         validationSchema={reunionSchema}
         onSubmit={async(valores )=> {
-          // same shape as initial values
           console.log(valores);
           await axios.post(url,valores).then(response => {
-            Reunion.modalInsertar();
-           // Materias2.peticionGet(); 
           }).catch(error => {
-            console.log(error.message);
+            //console.log(error.message);
+            if( error.response === undefined ){
+              notify( 'Comprueba todas las configuraciones!!' )
+              alert("Favor de probar las configuraciones y Datos Error!")     
+            }
+            if( error.response.status === 401 && error.response.headers['content-type'] === 'application/xml; charset=UTF-8' ){
+              notify( 'usa la configuración correcta en el header' )
+              alert ("Posible fallo en le configuracion de header")
+            }
+            if( error.response.status === 401 && error.response.headers['content-type'] === 'application/json' ){
+             notify( error.response.data.message )
+             alert("Error en servidor 401")
+             }
+             if( error.response.status === 401 && error.response.headers['content-type'] === 'application/xml; charset=UTF-8' ){
+              notify( 'Please, use a correct authentication header' )
+              alert("Error 401 posible problema de autenticación")
+            }
+            if( error.response.status === 500 && error.response.headers['content-type'] === 'text/html; charset=utf-8' ){
+              notify("Error en los datos, posible datos repetido error 500" )
+              alert("Posible Registro repetido error 500")
+             }
+            
           })
+          props.mod({ modalInsertar:false});
         }}
         
       >
@@ -65,69 +81,50 @@ const ValidacionReunion = () => {
         {({touched, errors}) => (
 
           <Form className="formulario">
-            
-
             <div>
-              <label htmlFor="cantidad de alumnos">Descripcion</label>
+              <label htmlFor="cantidad de alumnos">Cantidad de Alumnos</label>
               <Field
                 type="text"
-                name="cantidadalumnos"
+                name="cantidad_alumnos"
                 placeholder="Agrega la cantidad de alumnos"
-                id="cantidadalumnos"
+                id="cantidad_alumnos"
               />
               {touched.cantidad_alumnos && errors.cantidad_alumnos && <div className='error'>{errors.cantidad_alumnos}</div>}
-              <ErrorMessage name="cantidadalumnos" component="div" />
+             
             </div>
 
             <div>
-              <label htmlFor="Fecha">Fecha</label>
-              <Field
-                type="text"
-                name="Fecha"
-                placeholder="Agrega la Fecha"
-                id="Fecha"
-              />
-              {touched.fecha && errors.fecha && <div className='error'>{errors.fecha}</div>}
-              <ErrorMessage name="Fecha" component="div" />
+            <label htmlFor="idclase">Clase</label>
+                   <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                    name="idclase" id="idclase" >
+                    {
+                    props.dataclase.map(clase => (
+                    <option key={clase.id} value={clase.id}>{clase.nombre}</option>))
+                    }
+                  </select>
+                  {touched.detalle && errors.detalle && <div className='error'>{errors.detalle}</div>}
             </div>
 
+
             <div>
-              <label htmlFor="Detalle">Fecha</label>
+              <label htmlFor="Detalle">Detalle</label>
               <Field
                 type="text"
                 name="detalle"
                 placeholder="Agrega los Detalles"
                 id="detalle"
+                
               />
               {touched.detalle && errors.detalle && <div className='error'>{errors.detalle}</div>}
-              <ErrorMessage name="Detalle" component="div" />
-            </div>
+             </div> 
 
-            <div>
-              <label htmlFor="Clase">Fecha</label>
-              <Field
-                type="text"
-                name="idclase"
-                placeholder="Agrega el ID c"
-                id="detalle"
-              />
-              {touched.idclase && errors.idclase && <div className='error'>{errors.idclase}</div>}
-              <ErrorMessage name="idclase" component="div" />
-            </div>
-
+      
             <button type="submit" >Guardar</button>
           </Form>
-
         )}
-
       </Formik>
-
-
     </>
-
   );
-
-
 }
 
 export default ValidacionReunion;

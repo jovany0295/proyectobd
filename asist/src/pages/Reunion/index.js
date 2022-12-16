@@ -2,35 +2,49 @@ import React, { Component } from 'react';
 import './index.css';
 import axios from "axios";
 import Search from '../../components/Search';
+
+ 
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import ValidacionReunion from '../../Validacion/Reunion/Reunion';
+import { boolean } from 'yup';
+//import { createContext, useState, useEffect} from "react";
+//import {ReuContext} from '../../Context/Reunion';
+//import { ReactDOM } from 'react';
 
 const url = "http://127.0.0.1:8000/bd/v1/Reunion/";
 const urlClase = "http://127.0.0.1:8000/bd/v1/Clase/";
 
+
 class Reunion extends Component {
-  state = {
-    result: '',
-    data: [],
-    dataClase: [],
-    modalInsertar: false,
-    modalEliminar: false,
-    form: {
-      id: '',
-      cantidad_alumnos: '',
-      detalle: '',
-      idclase: '',
-      fecha: '',
-    }
+  constructor(props) {
+    super(props);
+    //this.handleChangeclase = this.handleChangeclase.bind(this);
+    this.state = {
+      result: '',
+      data: [],
+      dataClase: [],
+      modalInsertar: false,
+      modalEliminar: false, 
   }
+  this.state.form ={
+    id: '',
+    cantidad_alumnos: '',
+    detalle: '',
+    idclase: '',
+    fecha: '',
+  }
+  };
+
   onChange = async e => {
     e.persist();
     await this.setState({ result: e.target.value });
     console.log(this.state.result);
+    
   }
   peticionGet = () => {
     axios.get(url).then(response => {
       this.setState({ data: response.data });
+     
       console.log(response.data);
 
     }).catch(error => {
@@ -38,8 +52,10 @@ class Reunion extends Component {
     })
   }
   peticionGetClase = () => {
+   // console.log("Holaa")
     axios.get(urlClase).then(response => {
       this.setState({ dataClase: response.data });
+      
     }).catch(error => {
       console.log(error.message);
     })
@@ -66,8 +82,13 @@ class Reunion extends Component {
     })
   }
   modalInsertar = () => {
-    this.setState({ modalInsertar: !this.state.modalInsertar });
+    this.setState({ modalInsertar:false});
+      this.peticionGet();
+    
   }
+  
+  
+
   seleccionarReunion = (reunion) => {
     this.setState({
       tipoModal: 'actualizar',
@@ -90,14 +111,20 @@ class Reunion extends Component {
     });
     console.log(this.state.form);
   }
+  
   componentDidMount() {
+ 
     this.peticionGet();
     this.peticionGetClase();
+    
   }
+
+
   render() {
-    const { form } = this.state;
+   // const { form } = this.state;
     return (
       <>
+        
         <div className='container'>
           <div className="App">
             <h2>Reuniones</h2>
@@ -105,12 +132,13 @@ class Reunion extends Component {
 
             <div class="mb-3 row">
               <div class="col-sm-4">
-                <input type="text" class="form-control" placeholder='Buscar Reunion' value={this.state.result} onChange={this.onChange} />
+              <input type="text" class="form-control" placeholder='Buscar Reunion' value={this.state.result} onChange={this.onChange} />
               </div>
               <div class="col-sm-4">
               </div>
               <div class="col-sm-4">
-                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Reunion</button>
+               
+                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar'}); this.setState({ modalInsertar: true })  }}>Agregar Reunion</button>
               </div>
             </div>
             <table className="table" class="table table-striped table-hover">
@@ -136,7 +164,7 @@ class Reunion extends Component {
                         <td>{reunion.fecha}</td>
 
                         <td>
-                          <button className="btn btn-primary" onClick={() => { this.seleccionarReunion(reunion); this.modalInsertar() }}>Actualizar</button>
+                          <button className="btn btn-primary" onClick={() => { this.seleccionarReunion(reunion); }}>Actualizar</button>
                           {"   "}
                           <button className="btn btn-danger" onClick={() => { this.seleccionarReunion(reunion); this.setState({ modalEliminar: true }) }}>Eliminar</button>
                         </td>
@@ -150,14 +178,15 @@ class Reunion extends Component {
                 <span style={{ float: 'right' }} onClick={() => this.modalInsertar()}>x</span>
               </ModalHeader>
               <ModalBody>
-               <ValidacionReunion/> 
-              </ModalBody>
-
-              
+               <ValidacionReunion  
+               dataclase ={this.state.dataClase}
+               mod={this.modalInsertar()}
+               /> 
+              </ModalBody> 
             </Modal>
             <Modal isOpen={this.state.modalEliminar}>
               <ModalBody>
-                Estás seguro que deseas eliminar: {form && form.id}
+                Estás seguro que deseas eliminar: {this.stateform && this.state.form.id}
               </ModalBody>
               <ModalFooter>
                 <button className="btn btn-danger" onClick={() => this.peticionDelete()}>Sí</button>
@@ -168,6 +197,10 @@ class Reunion extends Component {
         </div>
       </>
     );
-  }
+  } //Fin render
 }
+
+/*const root = ReactDOM.createRoot(document.getElementById('root'));
+//root.render(<Reunion />);*/
 export default Reunion;
+

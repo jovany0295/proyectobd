@@ -3,6 +3,7 @@ import './App.css';
 import axios from "axios";
 import "bootstrap/dist/js/bootstrap.js";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import ValidacionMaterias from '../../Validacion/Clases/Clases'
 import Grupo from '../Grupo';
 import Materias from '../Materias';
 import Search from '../../components/Search';
@@ -14,8 +15,12 @@ const urlPeriodo = "http://127.0.0.1:8000/bd/v1/Periodo/";
 const urlMateria = "http://127.0.0.1:8000/bd/v1/Materia/";
 const urlGrupo = "http://127.0.0.1:8000/bd/v1/Grupo/";
 
-class Alumnos extends Component {
-  state = {
+class Clasess extends Component {
+ 
+  constructor(props) {
+    super(props);
+  //this.handleChangeclase = this.handleChangeclase.bind(this);
+  this.state = {
     result: '',
     data: [],
     dataCarrera: [],
@@ -25,17 +30,20 @@ class Alumnos extends Component {
     dataGrupo: [],
     modalInsertar: false,
     modalEliminar: false,
-    form: {
-      id: '',
+               }
+               
+  this.state.form ={
+     id: '',
       nombre: '',
       horario: '',
       idCarrera: '',
       idMaestro: '',
       idPeriodo: '',
       idGrupo: '',
-      idMateria: ''
-    }
-  }
+      idMateria: '',
+                  }
+  };
+
   onChange = async e => {
     e.persist();
     await this.setState({ result: e.target.value });
@@ -105,7 +113,8 @@ class Alumnos extends Component {
     })
   }
   modalInsertar = () => {
-    this.setState({ modalInsertar: !this.state.modalInsertar });
+    this.setState({ modalInsertar:false});
+    this.peticionGet();
   }
   seleccionarAlumno = (clase) => {
     this.setState({
@@ -155,7 +164,7 @@ class Alumnos extends Component {
               <div class="col-sm-4">
               </div>
               <div class="col-sm-4">
-                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' }); this.modalInsertar() }}>Agregar Nueva Clase</button>
+                <button className="btn btn-success" onClick={() => { this.setState({ form: null, tipoModal: 'insertar' });this.setState({ modalInsertar: true })  }}>Agregar Nueva Clase</button>
               </div>
             </div>
             <br /><br />
@@ -199,58 +208,15 @@ class Alumnos extends Component {
             <Modal className='ajustarmodal' isOpen={this.state.modalInsertar}>
 
               <ModalBody>
-                <div className="form-group">
-                  <label htmlFor="id">ID</label>
-                  <input className="form-control" type="text" name="id" id="id" readOnly
-                    onChange={this.handleChange} value={form ? form.id : this.state.data.length + 1} />
-                  <br />
-                  <label htmlFor="nombre">Nombre</label>
-                  <input className="form-control" type="text" name="nombre" id="nombre"
-                    onChange={this.handleChange} value={form ? form.nombre : ''} />
-                  <br />
-                  <label htmlFor="nombre">Horario</label>
-                  <input className="form-control" type="text" name="horario" id="horario"
-                    onChange={this.handleChange} value={form ? form.horario : ''} />
-                  <br />
-                  <label htmlFor="nombre">carrera</label>
-                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                    name="idCarrera" id="idCarrera" onChange={this.handleChange}>
-                    {this.state.dataCarrera.map(carrera => (
-                      <option key={carrera.id} value={carrera.id}>{carrera.nombre}</option>))
-                    }
-                  </select>
-                  <br />
-                  <label htmlFor="nombre">Maestro</label>
-                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                    name="idMaestro" id="idMaestro" onChange={this.handleChange}>
-                    {this.state.dataMaestro.map(maestro => (
-                      <option key={maestro.id} value={maestro.id}>{maestro.nombre}</option>))
-                    }
-                  </select>
-                  <br />
-                  <label htmlFor="nombre">Periodo</label>
-                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                    name="idPeriodo" id="idPeriodo" onChange={this.handleChange}>
-                    {this.state.dataPeriodo.map(periodo => (
-                      <option key={periodo.id} value={periodo.id}>{periodo.Descripcion}</option>))
-                    }
-                  </select>
-                  <br />
-                  <label htmlFor="nombre">Grupo</label>
-                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                    name="idGrupo" id="idGrupo" onChange={this.handleChange}>
-                    {this.state.dataGrupo.map(grupo => (
-                      <option key={grupo.id} value={grupo.id}>{grupo.nombre}</option>))
-                    }
-                  </select>
-                  <br />
-                  <label htmlFor="nombre">Materia</label>
-                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                    name="idMateria" id="idMateria" onChange={this.handleChange}>
-                    {this.state.dataMateria.map(materia => (
-                      <option key={materia.id} value={materia.id}>{materia.nombre}</option>))
-                    }
-                  </select>
+                <div >
+                <ValidacionMaterias 
+                  mod={this.modalInsertar}
+                  carrerastate={this.state.dataCarrera}
+                  maestrostate={this.state.dataMaestro}
+                  periodostate={this.state.dataPeriodo}
+                  grupostate={this.state.dataGrupo}
+                  materiastate={this.state.dataMateria}
+                  />
                 </div>
               </ModalBody>
               <ModalFooter>
@@ -280,4 +246,4 @@ class Alumnos extends Component {
     );
   }
 }
-export default Alumnos;
+export default Clasess;
